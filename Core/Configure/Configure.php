@@ -7,7 +7,7 @@ class Configure
     *   Variable where the config goes
     *
     */
-    public $vars;
+    protected static $_instances = array();
 
     /*
     *
@@ -16,7 +16,7 @@ class Configure
     */
     public function write($name, $data)
     {
-        $this->vars[$name] = $data;
+        self::$_instances[$name] = $data;
     }
 
     /*
@@ -26,6 +26,6 @@ class Configure
     */
     public function read($name)
     {
-        return $this->vars[$name];
+        return self::$_instances[$name];
     }
 }
