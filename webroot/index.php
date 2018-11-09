@@ -1,11 +1,8 @@
 <?php
 
-    // Config laden
-
-    // Database connecting
-
-    // Test: Configure class
+    // testing purposes
     include_once('Core/Configure/Configure.php');
+    include_once('Core/Database/Database.php');
 
-    Configure::write('site.name', 'DTWENTY');
-    echo Configure::read('site.name');
+    Database::connect();
+    var_dump(Database::test('SELECT * FROM users'));
