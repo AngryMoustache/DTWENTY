@@ -14,7 +14,7 @@ class Configure
     *   Write configure data
     *
     */
-    public function write($name, $data)
+    static function write($name, $data)
     {
         self::$_instances[$name] = $data;
     }
@@ -24,7 +24,7 @@ class Configure
     *   Read configure data
     *
     */
-    public function read($name)
+    static function read($name)
     {
         return self::$_instances[$name];
     }
