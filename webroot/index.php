@@ -1,8 +1,11 @@
 <?php
 
-    // testing purposes
-    include_once('Core/Configure/Configure.php');
-    include_once('Core/Database/Database.php');
+    // Load the core file
+    include_once('Core/D20/D20.php');
 
+    // Load the good stuff
+    D20::load('Configure');
+    D20::load('Database');
+
+    // Connect to the database
     Database::connect();
-    var_dump(Database::test('SELECT * FROM users'));
