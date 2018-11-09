@@ -4,12 +4,8 @@
 
     // Database connecting
 
-    // Load stuff
+    // Test: Configure class
     include_once('../Core/Configure/Configure.php');
 
-    // $config = new Configure();
-    // $config->write('test', array('test', 'test'));
-    // var_dump($config->read('test'));
-
-    Configure::write('test', array('test'));
-    Configure::read('test');
+    Configure::write('site.name', 'DTWENTY');
+    echo Configure::read('site.name');
