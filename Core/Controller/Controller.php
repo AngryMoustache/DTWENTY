@@ -30,7 +30,19 @@ class Controller
         {
             foreach ($this->models as $model)
             {
-                include_once('Models/' . $model . '.php');
+                if (strpos($model, '.') > -1)
+                {
+                    // Plugin model
+                    $model = explode('.', $model);
+                    include_once('Plugins/' . $model[0] . '/Models/' . $model[1] . '.php');
+                    $model = $model[1];
+                }
+                else
+                {
+                    // Core model
+                    include_once('Models/' . $model . '.php');
+                }
+
                 $this->{$model} = new $model();
             }
         }
