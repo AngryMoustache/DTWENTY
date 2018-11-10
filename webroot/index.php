@@ -1,11 +1,21 @@
 <?php
 
     // Load the core file
-    include_once('Core/D20/D20.php');
+    include_once('Core/DTWENTY/DTWENTY.php');
+
+    $D20 = new DTWENTY();
 
     // Load the good stuff
-    D20::load('Configure');
-    D20::load('Database');
+    $D20->load(
+        array(
+            'DTWENTY' => 'D20Exception',
+            'Debug',
+            'Controller',
+            'Configure',
+            'Database',
+            'View',
+        )
+    );
 
-    // Connect to the database
-    Database::connect();
+    // Start DTWENTY
+    $D20->init();

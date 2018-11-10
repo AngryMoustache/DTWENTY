@@ -26,6 +26,9 @@ class Configure
     */
     static function read($name)
     {
-        return self::$_instances[$name];
+        if (isset(self::$_instances[$name]))
+            return self::$_instances[$name];
+
+        throw new D20Exception('Configure::read(' . $name . '): not found');
     }
 }
