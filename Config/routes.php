@@ -13,7 +13,34 @@
 *       )
 *   );
 */
-Route::add('/', 'HomeController', 'home');
-Route::add('/users', 'UserController', 'overview');
-Route::add('/users/create', 'UserController', 'create');
-Route::add('/users/:id', 'UserController', 'single');
+Route::add(
+    array(
+        'path' => '/',
+        'controller' => 'HomeController',
+        'action' => 'home'
+    )
+);
+
+Route::add(
+    array(
+        'path' => '/users',
+        'controller' => 'UserController',
+        'action' => 'overview'
+    )
+);
+
+Route::add(
+    array(
+        'path' => '/users/create',
+        'controller' => 'UserController',
+        'action' => 'create'
+    )
+);
+
+Route::add(
+    array(
+        'path' => '/users/:id',
+        'controller' => 'UserController',
+        'action' => 'single'
+    )
+);

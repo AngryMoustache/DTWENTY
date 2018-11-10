@@ -23,12 +23,13 @@ class View
     *   Render the content
     *
     */
-    public function content($content = null)
+    public function content($content = null, $plugin = null)
     {
         if ($content == null)
             $content = $this->content;
 
-        include_once('Views/' . $content . '.dng');
+        if ($plugin == null) include_once('Views/' . $content . '.dng');
+        else include_once('Plugins/' . $plugin . '/Views/' . $content . '.dng');
     }
 
     /*

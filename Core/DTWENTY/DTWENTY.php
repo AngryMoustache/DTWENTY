@@ -9,6 +9,16 @@ class DTWENTY
 {
     /*
     *
+    *   Initializing
+    *
+    */
+    public function __construct()
+    {
+         $this->Plugins = new stdClass();
+    }
+
+    /*
+    *
     *   Initialize DTWENTY
     *
     */
@@ -21,8 +31,7 @@ class DTWENTY
         if ($route)
         {
             $this->controllerAction(
-                $route['route']['controller'],
-                $route['route']['action'],
+                $route['route'],
                 $route['parameters']
             );
         }
@@ -52,15 +61,36 @@ class DTWENTY
 
     /*
     *
+    *   Load Plugins
+    *
+    */
+    public function plugins($plugins)
+    {
+        foreach ($plugins as $value)
+        {
+            $path = 'Plugins/' . $value . '/index.php';
+            require_once $path;
+            $this->Plugins->{$value} = new $value();
+        }
+    }
+
+    /*
+    *
     *   Activate a controllers action
     *
     */
-    public function controllerAction($controller, $action, $parameters)
+    public function controllerAction($route, $parameters)
     {
         include_once('Controllers/AppController.php');
-        include_once('Controllers/' . $controller . '.php');
-        $this->Controller = new $controller();
-        call_user_func_array(array($this->Controller, $action), $parameters);
+
+        if (isset($route['plugin']))
+            $plugin = 'Plugins/' . $route['plugin'] . '/';
+        else $plugin = '';
+
+        include_once($plugin . 'Controllers/' . $route['controller'] . '.php');
+        $this->Controller = new $route['controller']();
+
+        call_user_func_array(array($this->Controller, $route['action']), $parameters);
     }
 
     /*

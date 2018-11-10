@@ -19,13 +19,16 @@ class Route
     *   Add a route
     *
     */
-    static function add($path, $controller, $action)
+    static function add($options)
     {
-        self::$_instances[] = array(
-            'path' => $path,
-            'controller' => $controller,
-            'action' => $action
-        );
+        $_new = array();
+
+        foreach ($options as $key => $value)
+        {
+            $_new[$key] = $value;
+        }
+
+        self::$_instances[] = $_new;
     }
 
     /*
