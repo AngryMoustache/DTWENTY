@@ -87,4 +87,25 @@ class Database
             }
         }
     }
+
+    /*
+    *
+    *   Do a raw SQL for INSERT and UPDATE
+    *
+    */
+    static function SQL($sql, $return = true) {
+        $db = self::$_db;
+        $stmt = $db->prepare($sql);
+        if ($stmt)
+        {
+            $stmt->execute();
+            if ($return)
+            {
+                $id = $db->lastInsertId();
+                return $id;
+            }
+
+            return 'success';
+        }
+    }
 }

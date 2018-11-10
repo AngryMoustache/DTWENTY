@@ -52,4 +52,27 @@ class Model
             return Database::SQLselect($sql)[0];
         }
     }
+
+    /*
+    *
+    *   Save a new item in the database
+    *
+    */
+    public function create($data = array())
+    {
+        $keys = '';
+        $values = '';
+
+        foreach ($data as $key => $value)
+        {
+            $keys .= '`' . $key . '`, ';
+            $values .= '"' . $value . '", ';
+        }
+
+        $keys = substr($keys, 0, -2);
+        $values = substr($values, 0, -2);
+
+        $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
+        return Database::SQL($sql);
+    }
 }

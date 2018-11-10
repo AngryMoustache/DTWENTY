@@ -15,4 +15,5 @@
 */
 Route::add('/', 'HomeController', 'home');
 Route::add('/users', 'UserController', 'overview');
+Route::add('/users/create', 'UserController', 'create');
 Route::add('/users/:id', 'UserController', 'single');

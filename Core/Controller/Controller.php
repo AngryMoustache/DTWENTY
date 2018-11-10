@@ -45,4 +45,15 @@ class Controller
             }
         }
     }
+
+    /*
+    *
+    *   Redirect to a different page
+    *
+    */
+    public function redirect($target)
+    {
+        header('Location: ' . $target);
+        die();
+    }
 }
