@@ -11,6 +11,7 @@
             'DTWENTY' => 'D20Exception',
             'Debug',
             'Controller',
+            'Model',
             'Configure',
             'Database',
             'View',

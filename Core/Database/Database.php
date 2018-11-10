@@ -72,7 +72,7 @@ class Database
     *   Test the connection
     *
     */
-    static function test($sql, $return = true)
+    static function SQLselect($sql, $return = true)
     {
         $db = self::$_db;
         if ($db->query($sql))

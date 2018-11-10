@@ -14,8 +14,7 @@ class DTWENTY
     */
     public function init()
     {
-        // Database::connect();
-        // $this->View = new View();
+        Database::connect();
         $this->controllerAction('HomeController', 'home');
     }
 
