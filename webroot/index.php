@@ -16,6 +16,7 @@
             'Configure',
             'Database',
             'View',
+            'Helper',
         )
     );
 

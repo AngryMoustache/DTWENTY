@@ -11,6 +11,13 @@ class Controller
 
     /*
     *
+    *   The helpers this controller uses
+    *
+    */
+    public $helpers = array();
+
+    /*
+    *
     *   Initialize the controller
     *
     */
@@ -25,6 +32,16 @@ class Controller
             {
                 include_once('Models/' . $model . '.php');
                 $this->{$model} = new $model();
+            }
+        }
+
+        // load helpers
+        if (count($this->helpers))
+        {
+            foreach ($this->helpers as $helper)
+            {
+                include_once('Helpers/' . $helper . 'Helper.php');
+                $this->View->{$helper} = new $helper();
             }
         }
     }

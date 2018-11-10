@@ -3,6 +3,7 @@
     <head>
         <title><?php echo Configure::read('site.name'); ?></title>
         <link rel="icon" href="/webroot/favicon.ico">
+        <?php echo $this->Html->style('main'); ?>
     </head>
     <body>
         <main>

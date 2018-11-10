@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends Controller
+class UserController extends AppController
 {
     public $models = array('User');
 

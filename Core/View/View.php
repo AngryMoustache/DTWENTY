@@ -15,7 +15,6 @@ class View
     public function render($content)
     {
         $this->content = $content;
-        // include_once('Views/' . $content . '.dng');
         include_once('Views/Main/main.dng');
     }
 

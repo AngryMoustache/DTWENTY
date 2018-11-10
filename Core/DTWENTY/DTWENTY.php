@@ -57,6 +57,7 @@ class DTWENTY
     */
     public function controllerAction($controller, $action, $parameters)
     {
+        include_once('Controllers/AppController.php');
         include_once('Controllers/' . $controller . '.php');
         $this->Controller = new $controller();
         call_user_func_array(array($this->Controller, $action), $parameters);
