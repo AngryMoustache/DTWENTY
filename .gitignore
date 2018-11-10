@@ -1,2 +1,1 @@
-/Config/dev/*
-!/Config/dev/empty
+/Config/dev/database.php
