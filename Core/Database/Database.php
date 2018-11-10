@@ -69,7 +69,7 @@ class Database
 
     /*
     *
-    *   Test the connection
+    *   Select
     *
     */
     static function SQLselect($sql, $return = true)
