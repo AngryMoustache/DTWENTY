@@ -17,6 +17,13 @@
             'Database',
             'View',
             'Helper',
+            'Plugin',
+        )
+    );
+
+    $D20->plugins(
+        array(
+            'Admin'
         )
     );
 
