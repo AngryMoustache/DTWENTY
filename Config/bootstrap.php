@@ -1,6 +1,5 @@
 <?php
 
-Configure::write('env', 'dev');
-include_once Configure::read('env') . '/bootstrap.php';
-
 Configure::write('site.name', 'DTWENTY');
+include_once 'routes.php';
+include_once 'enviroment.php';

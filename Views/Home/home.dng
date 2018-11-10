@@ -3,16 +3,3 @@
     We hope you enjoy your stay in our dungeon ( ͡° ͜ʖ ͡°)<br>
     You rolled a <?php echo $this->randomNumber; ?>!
 </p>
-
-<table>
-    <thead>
-        <td>ID</td>
-        <td>Username</td>
-    </thead>
-<?php foreach ($this->data as $item) : ?>
-    <tr>
-        <td><?php echo $item['id']; ?></td>
-        <td><?php echo $item['username']; ?></td>
-    </tr>
-<?php endforeach; ?>
-</table>

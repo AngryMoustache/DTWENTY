@@ -9,13 +9,27 @@ class DTWENTY
 {
     /*
     *
-    *   $this->View for calling the View class
+    *   Initialize DTWENTY
     *
     */
     public function init()
     {
         Database::connect();
-        $this->controllerAction('HomeController', 'home');
+
+        // Find the current route and render it
+        $route = Route::find('/');
+        if ($route)
+        {
+            $this->controllerAction(
+                $route['route']['controller'],
+                $route['route']['action'],
+                $route['parameters']
+            );
+        }
+        else
+        {
+            throw new D20Exception('Route not found');
+        }
     }
 
     /*
@@ -38,27 +52,14 @@ class DTWENTY
 
     /*
     *
-    *   Render a page (main by default)
+    *   Activate a controllers action
     *
     */
-    public function controllerAction($controller, $action)
+    public function controllerAction($controller, $action, $parameters)
     {
-        // $this->controller = 'HomeController';
-        // $this->View->render($view);
-
         include_once('Controllers/' . $controller . '.php');
         $this->Controller = new $controller();
-        $this->Controller->$action();
-    }
-
-    /*
-    *
-    *   Load the content
-    *
-    */
-    public function content()
-    {
-        // include_once('Views/' . $view);
+        call_user_func_array(array($this->Controller, $action), $parameters);
     }
 
     /*

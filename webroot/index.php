@@ -12,6 +12,7 @@
             'Debug',
             'Controller',
             'Model',
+            'Route',
             'Configure',
             'Database',
             'View',

@@ -1,0 +1,15 @@
+<h1>Users overview</h1>
+<p>This is a list of users</p>
+
+<table>
+    <thead>
+        <td>ID</td>
+        <td>Username</td>
+    </thead>
+<?php foreach ($this->data as $item) : ?>
+    <tr>
+        <td><?php echo $item['id']; ?></td>
+        <td><?php echo $item['username']; ?></td>
+    </tr>
+<?php endforeach; ?>
+</table>

@@ -34,6 +34,22 @@ class Model
     */
     public function find($select = '*', $options = array())
     {
-        return Database::SQLselect('SELECT ' . $select . ' FROM ' . $this->tablename);
+        if ($options == array())
+        {
+            return Database::SQLselect('SELECT ' . $select . ' FROM ' . $this->tablename);
+        }
+        else
+        {
+            $sql = 'SELECT ' . $select . ' FROM ' . $this->tablename;
+
+            foreach ($options as $key => $value)
+            {
+                $sql .= ' ' . $key . ' ' . $value;
+            }
+
+            if ($options['limit'] != 1)
+                return Database::SQLselect($sql);
+            return Database::SQLselect($sql)[0];
+        }
     }
 }
