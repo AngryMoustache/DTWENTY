@@ -48,46 +48,49 @@ class Route
     */
     static function find($url)
     {
-        $foundroute = null;
+        $foundRoute = null;
         $parameters = array();
 
         // The current URL
-        $currenturl = explode('/', $_SERVER['REQUEST_URI']);
-        array_shift($currenturl);
+        $currentUrl = explode('/', $_SERVER['REQUEST_URI']);
+        array_shift($currentUrl);
 
         // Loop and find the correct route
-        foreach (self::$_instances as $route)
+        foreach (self::$_instances as $_sysRoute)
         {
-            $_route = explode('/', $route['path']);
-            array_shift($_route);
+            $sysRoute = explode('/', $_sysRoute['path']);
+            array_shift($sysRoute);
 
-            // Check if they are completely the same
-            // This is faster for routes without a parameter
-            if ($_route === $currenturl)
+            // Check if the length matches
+            if (count($sysRoute) == count($currentUrl))
             {
-                $foundroute = array('route' => $route, 'parameters' => $parameters);
-                break;
-            }
+                $parameters = array();
 
-            $i = 0;
-            foreach ($_route as $checkUrl)
-            {
-                foreach ($currenturl as $curUrl)
+                for ($i = 0; $i < count($sysRoute); $i++)
                 {
-                    // Check if there is a variable
-                    $parameter = ((strpos($checkUrl, ':') > -1) ? true : false);
-                    if ($checkUrl != $curUrl && !$parameter) break;
-                    if ($parameter) {
-                        $parameters[ltrim($checkUrl, ':')] = $curUrl;
+                    $parameter = (strpos($sysRoute[$i], ':') > -1);
+                    if ($sysRoute[$i] == $currentUrl[$i])
+                    {
+                        // Nothing, continue
+                    }
+                    else if ($parameter)
+                    {
+                        $parameters[ltrim($sysRoute[$i], ':')] = $currentUrl[$i];
+                    }
+                    else
+                    {
+                        break;
                     }
 
-                    if ($i == count($_route))
-                        $foundroute = array('route' => $route, 'parameters' => $parameters);
-                    $i++;
+                    if ($i + 1 == count($sysRoute))
+                    {
+                        $foundRoute = array('route' => $_sysRoute, 'parameters' => $parameters);
+                        break;
+                    }
                 }
             }
         }
 
-        return $foundroute;
+        return $foundRoute;
     }
 }
