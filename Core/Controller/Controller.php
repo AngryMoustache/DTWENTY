@@ -30,7 +30,15 @@ class Controller
         {
             foreach ($this->models as $model)
             {
-                include_once('Models/' . $model . '.php');
+                $path = 'Models/' . $model . '.php';
+                if (isset($this->plugin))
+                {
+                    $path = 'Plugins/' . $this->plugin . '/Models/' . $model . '.php';
+                }
+
+                if (is_file($path)) include_once($path);
+                else include_once('Models/' . $model . '.php');
+
                 $this->{$model} = new $model();
             }
         }

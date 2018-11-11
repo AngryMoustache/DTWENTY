@@ -105,7 +105,21 @@ class Database
                 return $id;
             }
 
-            return 'success';
+            return true;
         }
+    }
+
+    /*
+    *
+    *   Get the fields of a table
+    *
+    */
+    static function fields($tablename)
+    {
+        return Database::SQLselect("
+            SELECT COLUMN_NAME, DATA_TYPE
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_NAME = '" . $tablename . "';"
+        );
     }
 }

@@ -1,0 +1,3 @@
+[submodule "/Plugins/Admin"]
+	path = /Plugins/Admin
+	url = https://github.com/AngryMoustache/DTWENTY_Admin

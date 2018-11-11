@@ -69,6 +69,7 @@ class Route
                 break;
             }
 
+            $i = 0;
             foreach ($_route as $checkUrl)
             {
                 foreach ($currenturl as $curUrl)
@@ -80,7 +81,9 @@ class Route
                         $parameters[ltrim($checkUrl, ':')] = $curUrl;
                     }
 
-                    $foundroute = array('route' => $route, 'parameters' => $parameters);
+                    if ($i == count($_route))
+                        $foundroute = array('route' => $route, 'parameters' => $parameters);
+                    $i++;
                 }
             }
         }

@@ -12,10 +12,16 @@ class View
     *   Render a view
     *
     */
-    public function render($content)
+    public function render($content, $plugin = null)
     {
         $this->content = $content;
-        include_once('Views/Main/main.dng');
+        $this->plugin = $plugin;
+
+        if ($plugin == null) $path = 'Views/Main/main.dng';
+        else $path = 'Plugins/' . $plugin . '/Views/main.dng';
+
+        if (!include_once($path))
+            include_once('Views/Main/main.dng');
     }
 
     /*
@@ -25,8 +31,8 @@ class View
     */
     public function content($content = null, $plugin = null)
     {
-        if ($content == null)
-            $content = $this->content;
+        if ($content == null) $content = $this->content;
+        if ($plugin == null) $plugin = $this->plugin;
 
         if ($plugin == null) include_once('Views/' . $content . '.dng');
         else include_once('Plugins/' . $plugin . '/Views/' . $content . '.dng');
