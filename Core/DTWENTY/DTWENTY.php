@@ -14,7 +14,23 @@ class DTWENTY
     */
     public function __construct()
     {
-         $this->Plugins = new stdClass();
+        $this->Plugins = new stdClass();
+        $this->load(
+            array(
+                'Configure',
+                'Route',
+                'Database',
+                'DTWENTY' => 'D20Exception',
+                'Debug',
+                'Controller',
+                'Model',
+                'View',
+                'Helper',
+                'Plugin',
+            )
+        );
+
+        Database::connect();
     }
 
     /*
@@ -24,8 +40,6 @@ class DTWENTY
     */
     public function init()
     {
-        Database::connect();
-
         // Find the current route and render it
         $route = Route::find('/');
         if ($route)

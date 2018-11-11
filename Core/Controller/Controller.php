@@ -30,18 +30,14 @@ class Controller
         {
             foreach ($this->models as $model)
             {
-                if (strpos($model, '.') > -1)
+                $path = 'Models/' . $model . '.php';
+                if (isset($this->plugin))
                 {
-                    // Plugin model
-                    $model = explode('.', $model);
-                    include_once('Plugins/' . $model[0] . '/Models/' . $model[1] . '.php');
-                    $model = $model[1];
+                    $path = 'Plugins/' . $this->plugin . '/Models/' . $model . '.php';
                 }
-                else
-                {
-                    // Core model
-                    include_once('Models/' . $model . '.php');
-                }
+
+                if (is_file($path)) include_once($path);
+                else include_once('Models/' . $model . '.php');
 
                 $this->{$model} = new $model();
             }

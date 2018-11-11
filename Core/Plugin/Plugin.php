@@ -23,14 +23,4 @@ class Plugin
     {
         $this->folder = get_called_class();
     }
-
-    /*
-    *
-    *   Load Controllers
-    *
-    */
-    public function loadControllers()
-    {
-
-    }
 }

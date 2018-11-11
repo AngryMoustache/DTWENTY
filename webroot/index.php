@@ -5,22 +5,7 @@
 
     $D20 = new DTWENTY();
 
-    // Load the good stuff
-    $D20->load(
-        array(
-            'DTWENTY' => 'D20Exception',
-            'Debug',
-            'Controller',
-            'Model',
-            'Route',
-            'Configure',
-            'Database',
-            'View',
-            'Helper',
-            'Plugin',
-        )
-    );
-
+    // Load the plugins
     $D20->plugins(
         array(
             'Admin'
