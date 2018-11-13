@@ -119,7 +119,8 @@ class Database
         return Database::SQLselect("
             SELECT COLUMN_NAME, DATA_TYPE
             FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_NAME = '" . $tablename . "';"
+            WHERE TABLE_NAME = '" . $tablename . "'
+            AND TABLE_SCHEMA = '" . DatabaseConfig::database()['dbname'] . "';"
         );
     }
 }
