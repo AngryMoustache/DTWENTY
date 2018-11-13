@@ -5,3 +5,6 @@ Configure::write('env', 'dev');
 
 include_once 'routes.php';
 include_once 'enviroment.php';
+
+// Load plugins
+DTWENTY::addPlugin('Character');

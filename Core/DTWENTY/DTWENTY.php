@@ -9,6 +9,13 @@ class DTWENTY
 {
     /*
     *
+    *   List of loaded plugins
+    *
+    */
+    protected static $_plugins = array();
+
+    /*
+    *
     *   Initializing
     *
     */
@@ -29,6 +36,8 @@ class DTWENTY
                 'Plugin',
             )
         );
+
+        $this->plugins(self::$_plugins);
 
         Database::connect();
     }
@@ -71,6 +80,16 @@ class DTWENTY
 
             require_once $path;
         }
+    }
+
+    /*
+    *
+    *   Add plugin to the list to load
+    *
+    */
+    static function addPlugin($name)
+    {
+        self::$_plugins[] = $name;
     }
 
     /*
