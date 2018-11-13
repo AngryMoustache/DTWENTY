@@ -34,7 +34,6 @@ class Model
     *   (1) Set the model name
     *   (2) Autofill the tablename
     *   (3) Set the model labels
-    *   (4) Get the fields and the types
     *
     */
     public function __construct()
@@ -54,15 +53,6 @@ class Model
             'machineName' => strtolower($this->name),
             'machineNamePlural' => strtolower($this->name) . 's',
         );
-
-        // 4
-        $_fields = Database::fields($this->tablename);
-        foreach ($_fields as $field) {
-            $this->fields[$field['COLUMN_NAME']] = array(
-                'columnname' => $field['DATA_TYPE'],
-                'human' => ucwords(str_replace('_', ' ', $field['COLUMN_NAME']))
-            );
-        }
     }
 
     /*
