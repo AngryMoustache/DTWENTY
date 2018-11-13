@@ -85,7 +85,7 @@ class Route
                     if ($i + 1 == count($sysRoute))
                     {
                         $foundRoute = array('route' => $_sysRoute, 'parameters' => $parameters);
-                        break;
+                        break 2;
                     }
                 }
             }
