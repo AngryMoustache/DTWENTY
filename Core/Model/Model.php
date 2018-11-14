@@ -25,11 +25,11 @@ class Model
 
     /**
     *
-    *   Other models this model belongs to
+    *   Relations of the model
     *   @var array
     *
     */
-    public $belongsTo;
+    public $relations;
 
     /*
     *
@@ -58,30 +58,49 @@ class Model
         );
     }
 
-    /*
+    /**
     *
     *   A select statement for the model
+    *   @var array
     *
     */
-    public function find($select = '*', $options = array())
+    public function find($options = array())
     {
-        if ($options == array())
-        {
-            return Database::SQLselect('SELECT ' . $select . ' FROM ' . $this->tablename);
-        }
-        else
-        {
-            $sql = 'SELECT ' . $select . ' FROM ' . $this->tablename;
+        $_sql = '';
 
-            foreach ($options as $key => $value)
+        // Get the selector from options, otherwise it's just everything
+        if (!array_key_exists('select', $options) || $options['select'] == '*') {
+            $_select = '*';
+        } else {
+            $_select = implode($options['select'], ', ');
+        }
+
+        $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename;
+
+        // Joining tables
+        if (array_key_exists('relations', $options)) {
+            // TODO
+        }
+        else {
+            // Perform all joins
+            if (isset($this->relations['belongsTo']))
             {
-                $sql .= ' ' . $key . ' ' . $value;
-            }
+                foreach ($this->relations['belongsTo'] as $key => $value) {
+                    $this->{$key} = $this->loadModel($key);
 
-            if ($options['limit'] != 1)
-                return Database::SQLselect($sql);
-            return Database::SQLselect($sql)[0];
+                    $_sql .= ' join ' . $this->{$key}->tablename .
+                             ' on ' . $this->{$key}->tablename .
+                             '.' . $value['relation']  .
+                             ' = ' . $this->tablename .
+                             '.' . $value['foreignKey'];
+                }
+            }
         }
+
+        // TODO
+        // - where
+
+        return Database::SQLselect($_sql);
     }
 
     /*
@@ -105,5 +124,23 @@ class Model
 
         $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
         return Database::SQL($sql);
+    }
+
+    /*
+    *
+    *   Load a new model
+    *
+    */
+    public function loadModel($model, $plugin = null)
+    {
+        $path = 'Models/' . $model . '.php';
+        if ($plugin != null) {
+            $path = 'Plugins/' . $plugin . '/Models/' . $model . '.php';
+        }
+
+        if (is_file($path)) include_once($path);
+        else include_once('Models/' . $model . '.php');
+
+        return new $model();
     }
 }

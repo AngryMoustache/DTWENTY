@@ -41,7 +41,7 @@ class Route
     *   Get all routes
     *
     */
-    static function get()
+    static function getAll()
     {
         return self::$_instances;
     }

@@ -9,6 +9,7 @@
         <header>
             <a href="/">Home</a>
             <a href="/users">Users</a>
+            <a href="/tags">Tags</a>
         </header>
         <main>
             <?php $this->content(); ?>

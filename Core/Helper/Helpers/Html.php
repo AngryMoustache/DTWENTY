@@ -22,7 +22,7 @@ class Html extends Helper
     */
     public function link($shorthand, $parameters = array())
     {
-        $routes = Route::get();
+        $routes = Route::getAll();
         $path = array_search($shorthand, array_column($routes, 'shorthand'));
 
         if ($path !== false)

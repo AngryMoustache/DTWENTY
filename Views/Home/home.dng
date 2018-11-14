@@ -1,16 +1,6 @@
-<?php
-    $this_guy = $this->Html->link(
-        'single@UserController',
-        array(
-            'id' => 3
-        )
-    );
-?>
-
 <h1>Welcome to DTWENTY</h1>
 <p>
     We hope you enjoy your stay in our dungeon ( ͡° ͜ʖ ͡°)<br>
     You rolled a <?php echo $this->randomNumber; ?>!<br>
-    Also take a look at <a href="<?php echo $this_guy; ?>">THIS</a> guy!
 </p>
 

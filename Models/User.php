@@ -2,7 +2,5 @@
 
 class User extends Model
 {
-    public $belongsTo = array(
 
-    );
 }
