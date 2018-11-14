@@ -7,26 +7,29 @@
 */
 class Model
 {
-    /*
+    /**
     *
     *   The name of the model
+    *   @var string
     *
     */
     public $name;
 
-    /*
+    /**
     *
     *   The tablename for the model
+    *   @var string
     *
     */
     public $tablename;
 
-    /*
+    /**
     *
-    *   The fields for the model in the database
+    *   Other models this model belongs to
+    *   @var array
     *
     */
-    public $fields;
+    public $belongsTo;
 
     /*
     *

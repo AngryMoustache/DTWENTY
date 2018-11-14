@@ -28,6 +28,11 @@ class Route
             $_new[$key] = $value;
         }
 
+        if (!isset($_new['shorthand']))
+        {
+            $_new['shorthand'] = $_new['action'] . '@' . $_new['controller'];
+        }
+
         self::$_instances[] = $_new;
     }
 
