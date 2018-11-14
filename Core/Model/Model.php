@@ -88,9 +88,15 @@ class Model
                 foreach ($this->relations['belongsTo'] as $key => $value) {
                     $this->{$key} = $this->loadModel($key);
 
+                    if (!isset($value['foreignKey']))
+                        $value['foreignKey'] = strtolower($key) . '_id';
+
+                    if (!isset($value['relation']))
+                        $value['relation'] = 'id';
+
                     $_sql .= ' join ' . $this->{$key}->tablename .
                              ' on ' . $this->{$key}->tablename .
-                             '.' . $value['relation']  .
+                             '.' . $value['relation'] .
                              ' = ' . $this->tablename .
                              '.' . $value['foreignKey'];
                 }
