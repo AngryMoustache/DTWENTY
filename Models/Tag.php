@@ -3,10 +3,10 @@
 class Tag extends Model
 {
     public $relations = array(
-        'belongsTo' => array(
+        'hasOne' => array(
             'User' => array(
-                // 'foreignKey' => 'user_id',
-                // 'relation' => 'id',
+                'foreignKey' => 'user_id',
+                'targetForeignKey' => 'id',
             )
         )
     );

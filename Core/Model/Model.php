@@ -67,6 +67,7 @@ class Model
     public function find($options = array())
     {
         $_sql = '';
+        $_return = array();
 
         // Get the selector from options, otherwise it's just everything
         if (!array_key_exists('select', $options) || $options['select'] == '*') {
@@ -77,36 +78,43 @@ class Model
 
         $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename;
 
-        // Joining tables
-        if (array_key_exists('relations', $options)) {
-            // TODO
-        }
-        else {
-            // Perform all joins
-            if (isset($this->relations['belongsTo']))
+        $_return = Database::SQLselect($_sql);
+
+        for ($i = 0; $i < count($_return); $i++)
+        {
+            // Joining tables
+            if (array_key_exists('relations', $options))
             {
-                foreach ($this->relations['belongsTo'] as $key => $value) {
-                    $this->{$key} = $this->loadModel($key);
-
-                    if (!isset($value['foreignKey']))
-                        $value['foreignKey'] = strtolower($key) . '_id';
-
-                    if (!isset($value['relation']))
-                        $value['relation'] = 'id';
-
-                    $_sql .= ' join ' . $this->{$key}->tablename .
-                             ' on ' . $this->{$key}->tablename .
-                             '.' . $value['relation'] .
-                             ' = ' . $this->tablename .
-                             '.' . $value['foreignKey'];
+                // TODO
+            }
+            else
+            {
+                // Has One
+                if (isset($this->relations['hasOne']))
+                {
+                    foreach ($this->relations['hasOne'] as $key => $value)
+                    {
+                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i]['id']);
+                    }
                 }
+
+
+                // if (isset($this->relations['manyToMany']))
+                // {
+                //     foreach ($this->relations['manyToMany'] as $key => $value) {
+                //         $this->{$key} = $this->loadModel($key);
+
+                //         $_sql .= ' left outer join ' . $value['joinTable'] .
+                //                  ' on ' . $this->tablename . '.id = ' . $value['joinTable'] . '.' . $value['foreignKey'] .
+                //                  ' and ' . $value['joinTable'] . '.' . $value['foreignKey'] . ' = 1' .
+                //                  ' left outer join tags' .
+                //                  ' on ' . $value['joinTable'] . '.tag_id = tags.id';
+                //     }
+                // }
             }
         }
 
-        // TODO
-        // - where
-
-        return Database::SQLselect($_sql);
+        return $_return;
     }
 
     /*
@@ -148,5 +156,24 @@ class Model
         else include_once('Models/' . $model . '.php');
 
         return new $model();
+    }
+
+    /**
+    *   hasOne relationship
+    *   @var array
+    */
+    private function _hasOne($model, $relation, $currentId)
+    {
+        $this->{$model} = $this->loadModel($model);
+
+        $sql = 'select * from ' . $this->tablename .
+                ' join ' . $this->{$model}->tablename .
+                ' on ' . $this->{$model}->tablename .
+                '.' . $relation['targetForeignKey'] .
+                ' = ' . $this->tablename .
+                '.' . $relation['foreignKey'] .
+                ' where ' . $this->tablename . '.id = ' . $currentId;
+
+        return Database::SQLselect($sql)[0];
     }
 }

@@ -12,8 +12,8 @@
         <td><?php echo $item['id']; ?></td>
         <td><?php echo $item['name']; ?></td>
         <td>
-            <a href="<?php echo $this->Html->link('single@UserController', array('id' => $item['user_id'])); ?>">
-                <?php echo $item['username']; ?>
+            <a href="<?php echo $this->Html->link('single@UserController', array('id' => $item['User']['id'])); ?>">
+                <?php echo $item['User']['username']; ?>
             </a>
         </td>
     </tr>

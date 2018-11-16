@@ -6,14 +6,7 @@ class TagController extends AppController
 
     public function overview()
     {
-        $data = $this->Tag->find(array(
-            'select' => array(
-                'tags.id',
-                'tags.name',
-                'users.username',
-                'tags.user_id',
-            )
-        ));
+        $data = $this->Tag->find();
 
         $this->View->set(array('data' => $data));
         $this->View->render('Tag/overview');
