@@ -116,6 +116,7 @@ class Database
     */
     static function fields($tablename)
     {
+        Database::connect();
         return Database::SQLselect("
             SELECT COLUMN_NAME, DATA_TYPE
             FROM INFORMATION_SCHEMA.COLUMNS

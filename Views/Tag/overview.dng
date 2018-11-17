@@ -1,0 +1,21 @@
+<h1>Tags overview</h1>
+<p>This is a list of tags</p>
+
+<table>
+    <thead>
+        <td>ID</td>
+        <td>Name</td>
+        <td>User</td>
+    </thead>
+<?php foreach ($this->data as $item) : ?>
+    <tr>
+        <td><?php echo $item['id']; ?></td>
+        <td><?php echo $item['name']; ?></td>
+        <td>
+            <a href="<?php echo $this->Html->link('single@UserController', array('id' => $item['User']['id'])); ?>">
+                <?php echo $item['User']['username']; ?>
+            </a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>

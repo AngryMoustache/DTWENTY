@@ -1,3 +1,2 @@
 /Config/dev/database.php
-/Plugins/*
-!/Plugins/empty
+Plugins/*
