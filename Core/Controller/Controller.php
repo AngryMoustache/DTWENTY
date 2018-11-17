@@ -37,7 +37,7 @@ class Controller
                 }
 
                 if (is_file($path)) include_once($path);
-                else include_once('Models/' . $model . '.php');
+                else if (is_file('Models/' . $model . '.php'))  include_once('Models/' . $model . '.php');
 
                 $this->{$model} = new $model();
             }

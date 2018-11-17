@@ -52,7 +52,9 @@ class Model
     public function __construct()
     {
         // 1
-        $this->name = get_called_class();
+        if (!$this->name) {
+            $this->name = get_called_class();
+        }
 
         // 2
         if (!$this->tablename) {
@@ -164,7 +166,8 @@ class Model
             }
         }
 
-        if (count($_return) == 1) return $_return[0];
+        if (array_key_exists('limit', $options) && $options['limit'] == 1)
+            return $_return[0];
         return $_return;
     }
 
