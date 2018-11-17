@@ -7,26 +7,39 @@
 */
 class Model
 {
-    /*
+    /**
     *
     *   The name of the model
+    *   @var string
     *
     */
     public $name;
 
-    /*
+    /**
     *
     *   The tablename for the model
+    *   @var string
     *
     */
     public $tablename;
 
-    /*
+    /**
     *
-    *   The fields for the model in the database
+    *   Relations of the model
+    *   @var array
     *
     */
-    public $fields;
+    public $relations;
+
+    /**
+    *
+    *   The validation rules of the model
+    *   - notNull
+    *   
+    *   @var array
+    *
+    */
+    public $validation;
 
     /*
     *
@@ -55,30 +68,84 @@ class Model
         );
     }
 
-    /*
+    /**
     *
     *   A select statement for the model
+    *   @var array
     *
     */
-    public function find($select = '*', $options = array())
+    public function find($options = array())
     {
-        if ($options == array())
-        {
-            return Database::SQLselect('SELECT ' . $select . ' FROM ' . $this->tablename);
-        }
-        else
-        {
-            $sql = 'SELECT ' . $select . ' FROM ' . $this->tablename;
+        $_sql = '';
+        $_options = '';
+        $_return = array();
 
-            foreach ($options as $key => $value)
+        // Get the selector from options, otherwise it's just everything
+        if (!array_key_exists('select', $options) || $options['select'] == '*') {
+            $_select = '*';
+        } else {
+            $_select = implode($options['select'], ', ');
+        }
+
+        // where
+        if (array_key_exists('where', $options))
+        {
+            $i = 0;
+            foreach ($options['where'] as $value)
             {
-                $sql .= ' ' . $key . ' ' . $value;
+                if ($i == 0) $_word = ' where ';
+                else $_word = ' and ';
+                $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                $i++;
             }
-
-            if ($options['limit'] != 1)
-                return Database::SQLselect($sql);
-            return Database::SQLselect($sql)[0];
         }
+
+        // limit
+        if (array_key_exists('limit', $options))
+        {
+            $_options .= ' limit ' . $options['limit'];
+        }
+
+        $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename . ' ' . $_options;
+
+        $_return = Database::SQLselect($_sql);
+
+        for ($i = 0; $i < count($_return); $i++)
+        {
+            // Joining tables
+            if (array_key_exists('relations', $options))
+            {
+                // TODO
+            }
+            else
+            {
+                // Has One
+                if (isset($this->relations['hasOne']))
+                {
+                    foreach ($this->relations['hasOne'] as $key => $value)
+                    {
+                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i]['id']);
+                    }
+                }
+
+
+                // if (isset($this->relations['manyToMany']))
+                // {
+                //     foreach ($this->relations['manyToMany'] as $key => $value) {
+                //         $this->{$key} = $this->loadModel($key);
+
+                //         $_sql .= ' left outer join ' . $value['joinTable'] .
+                //                  ' on ' . $this->tablename . '.id = ' . $value['joinTable'] . '.' . $value['foreignKey'] .
+                //                  ' and ' . $value['joinTable'] . '.' . $value['foreignKey'] . ' = 1' .
+                //                  ' left outer join tags' .
+                //                  ' on ' . $value['joinTable'] . '.tag_id = tags.id';
+                //     }
+                // }
+            }
+        }
+
+        if (count($_return) == 1) return $_return[0];
+        return $_return;
     }
 
     /*
@@ -88,19 +155,104 @@ class Model
     */
     public function create($data = array())
     {
-        $keys = '';
-        $values = '';
+        $validation = $this->_validate($data);
+        if ($validation === true)
+        {
+            $keys = '';
+            $values = '';
+
+            foreach ($data as $key => $value)
+            {
+                $keys .= '`' . $key . '`, ';
+                $values .= '"' . $value . '", ';
+            }
+
+            $keys = substr($keys, 0, -2);
+            $values = substr($values, 0, -2);
+
+            $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
+            return Database::SQL($sql);
+        }
+        else
+        {
+            return array('errors' => $validation);
+        }
+    }
+
+    /**
+    *   Delete a row
+    *   @var bool
+    */
+    public function delete($id)
+    {
+        if (Database::SQL('DELETE FROM ' . $this->tablename . ' WHERE id = ' . $id, false))
+            return true;
+        return false;
+    }
+
+    /*
+    *
+    *   Load a new model
+    *
+    */
+    public function loadModel($model, $plugin = null)
+    {
+        $path = 'Models/' . $model . '.php';
+        if ($plugin != null) {
+            $path = 'Plugins/' . $plugin . '/Models/' . $model . '.php';
+        }
+
+        if (is_file($path)) include_once($path);
+        else include_once('Models/' . $model . '.php');
+
+        return new $model();
+    }
+
+    /**
+    *   hasOne relationship
+    *   @var array
+    */
+    private function _hasOne($model, $relation, $currentId)
+    {
+        $this->{$model} = $this->loadModel($model);
+
+        $sql = 'select * from ' . $this->tablename .
+                ' join ' . $this->{$model}->tablename .
+                ' on ' . $this->{$model}->tablename .
+                '.' . $relation['targetForeignKey'] .
+                ' = ' . $this->tablename .
+                '.' . $relation['foreignKey'] .
+                ' where ' . $this->tablename . '.id = ' . $currentId;
+
+        return Database::SQLselect($sql)[0];
+    }
+
+    /**
+    *   Validate the model during save
+    *   @var boolean
+    */
+    private function _validate($data)
+    {
+        $errors = array();
 
         foreach ($data as $key => $value)
         {
-            $keys .= '`' . $key . '`, ';
-            $values .= '"' . $value . '", ';
+            // Debug::dump($data);
+            foreach ($this->validation[$key] as $validation)
+            {
+                switch ($validation)
+                {
+                    case 'notNull':
+                        if ($value == '') $errors[] = 'The ' . $key . ' field cannot be empty.';
+                        break;
+                    default:
+                        throw new D20Exception('Validation rule "' . $validation . '" not found.');
+                        break;
+                }
+            }
         }
 
-        $keys = substr($keys, 0, -2);
-        $values = substr($values, 0, -2);
-
-        $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
-        return Database::SQL($sql);
+        if ($errors == array()) return true;
+        return $errors;
     }
 }

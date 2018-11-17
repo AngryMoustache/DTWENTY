@@ -28,6 +28,11 @@ class Route
             $_new[$key] = $value;
         }
 
+        if (!isset($_new['shorthand']))
+        {
+            $_new['shorthand'] = $_new['action'] . '@' . $_new['controller'];
+        }
+
         self::$_instances[] = $_new;
     }
 
@@ -36,7 +41,7 @@ class Route
     *   Get all routes
     *
     */
-    static function get()
+    static function getAll()
     {
         return self::$_instances;
     }

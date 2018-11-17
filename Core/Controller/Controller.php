@@ -48,7 +48,11 @@ class Controller
         {
             foreach ($this->helpers as $helper)
             {
-                include_once('Helpers/' . $helper . 'Helper.php');
+                $path = 'Views/Helpers/' . $helper . '.php';
+
+                if (is_file($path)) include_once($path);
+                else include_once('Core/Helper/Helpers/' . $helper . '.php');
+
                 $this->View->{$helper} = new $helper();
             }
         }

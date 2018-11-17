@@ -1,5 +1,0 @@
-<h1><?php echo $this->user['username']; ?></h1>
-<p>
-    Created on <?php echo $this->user['created']; ?>
-    with ID <?php echo $this->user['id']; ?>
-</p>

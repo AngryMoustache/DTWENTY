@@ -1,5 +1,6 @@
 <h1>Welcome to DTWENTY</h1>
 <p>
     We hope you enjoy your stay in our dungeon ( ͡° ͜ʖ ͡°)<br>
-    You rolled a <?php echo $this->randomNumber; ?>!
+    You rolled a <?php echo $this->randomNumber; ?>!<br>
 </p>
+

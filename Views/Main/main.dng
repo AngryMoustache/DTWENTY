@@ -6,10 +6,6 @@
         <?php echo $this->Html->style('main'); ?>
     </head>
     <body>
-        <header>
-            <a href="/">Home</a>
-            <a href="/users">Users</a>
-        </header>
         <main>
             <?php $this->content(); ?>
         </main>

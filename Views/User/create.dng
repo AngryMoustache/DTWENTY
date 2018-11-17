@@ -1,5 +1,0 @@
-<h1>Creating a user</h1>
-<form method="post">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="submit">
-</form>
