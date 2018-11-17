@@ -1,5 +1,15 @@
 <h1>Creating a user</h1>
+
+<?php if (isset($this->errors)) : ?>
+    <ul style='color: red;'>
+    <?php foreach ($this->errors as $error): ?>
+        <li><?php echo $error; ?></li>
+    <?php endforeach ?>
+    </ul>
+<?php endif; ?>
+
 <form method="post">
-    <input type="text" name="username" placeholder="Username" required>
+    <input type="text" name="username" placeholder="Username" value="<?php echo $_POST['username']; ?>">
+    <input type="password" name="password" placeholder="Password" value="<?php echo $_POST['password']; ?>">
     <input type="submit">
 </form>

@@ -31,6 +31,16 @@ class Model
     */
     public $relations;
 
+    /**
+    *
+    *   The validation rules of the model
+    *   - notNull
+    *   
+    *   @var array
+    *
+    */
+    public $validation;
+
     /*
     *
     *   Construct
@@ -124,20 +134,28 @@ class Model
     */
     public function create($data = array())
     {
-        $keys = '';
-        $values = '';
-
-        foreach ($data as $key => $value)
+        $validation = $this->_validate($data);
+        if ($validation === true)
         {
-            $keys .= '`' . $key . '`, ';
-            $values .= '"' . $value . '", ';
+            $keys = '';
+            $values = '';
+
+            foreach ($data as $key => $value)
+            {
+                $keys .= '`' . $key . '`, ';
+                $values .= '"' . $value . '", ';
+            }
+
+            $keys = substr($keys, 0, -2);
+            $values = substr($values, 0, -2);
+
+            $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
+            return Database::SQL($sql);
         }
-
-        $keys = substr($keys, 0, -2);
-        $values = substr($values, 0, -2);
-
-        $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
-        return Database::SQL($sql);
+        else
+        {
+            return array('errors' => $validation);
+        }
     }
 
     /*
@@ -175,5 +193,34 @@ class Model
                 ' where ' . $this->tablename . '.id = ' . $currentId;
 
         return Database::SQLselect($sql)[0];
+    }
+
+    /**
+    *   Validate the model during save
+    *   @var boolean
+    */
+    private function _validate($data)
+    {
+        $errors = array();
+
+        foreach ($data as $key => $value)
+        {
+            // Debug::dump($data);
+            foreach ($this->validation[$key] as $validation)
+            {
+                switch ($validation)
+                {
+                    case 'notNull':
+                        if ($value == '') $errors[] = 'The ' . $key . ' field cannot be empty.';
+                        break;
+                    default:
+                        throw new D20Exception('Validation rule "' . $validation . '" not found.');
+                        break;
+                }
+            }
+        }
+
+        if ($errors == array()) return true;
+        return $errors;
     }
 }

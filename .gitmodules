@@ -1,3 +1,6 @@
 [submodule "Admin"]
 	path = Plugins/Admin
 	url = https://github.com/AngryMoustache/DTWENTY_Admin
+[submodule "Plugins/Login"]
+	path = Plugins/Login
+	url = git@github.com:AngryMoustache/DTWENTY_Login.git

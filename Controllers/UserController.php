@@ -30,18 +30,19 @@ class UserController extends AppController
         if (isset($_POST['username']))
         {
             $_user = $this->User->create(array(
-                'username' => $_POST['username']
+                'username' => $_POST['username'],
+                'password' => $_POST['password'],
             ));
 
-            $user = $this->User->find('*',
-                array(
-                    'where' => 'id = ' . $_user,
-                    'limit' => 1,
-                )
-            );
-
-            $this->View->set(array('user' => $user));
-            $this->redirect('/users/' . $_user);
+            if (!isset($_user['errors']))
+            {
+                $this->redirect('/users/' . $_user);
+            }
+            else
+            {
+                $this->View->set(array('errors' => $_user['errors']));
+                $this->View->render('User/create');
+            }
         }
         else
         {

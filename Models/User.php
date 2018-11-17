@@ -11,4 +11,9 @@ class User extends Model
             )
         ),
     );
+
+    public $validation = array(
+        'username' => array('notNull'),
+        'password' => array('notNull'),
+    );
 }
