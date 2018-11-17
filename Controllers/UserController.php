@@ -49,4 +49,10 @@ class UserController extends AppController
             $this->View->render('User/create');
         }
     }
+
+    public function delete($id)
+    {
+        $this->User->delete($id);
+        $this->redirect('/users');
+    }
 }

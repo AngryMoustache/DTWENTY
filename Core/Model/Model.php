@@ -158,6 +158,17 @@ class Model
         }
     }
 
+    /**
+    *   Delete a row
+    *   @var bool
+    */
+    public function delete($id)
+    {
+        if (Database::SQL('DELETE FROM ' . $this->tablename . ' WHERE id = ' . $id, false))
+            return true;
+        return false;
+    }
+
     /*
     *
     *   Load a new model

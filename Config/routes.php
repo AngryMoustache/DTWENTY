@@ -47,6 +47,14 @@ Route::add(
 
 Route::add(
     array(
+        'path' => '/users/:id/delete',
+        'controller' => 'UserController',
+        'action' => 'delete'
+    )
+);
+
+Route::add(
+    array(
         'path' => '/tags',
         'controller' => 'TagController',
         'action' => 'overview'
