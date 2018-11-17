@@ -100,6 +100,12 @@ class Model
             }
         }
 
+        // order by (default)
+        if (!array_key_exists('order by', $options))
+        {
+            $_options .= ' order by id ';
+        }
+
         // limit
         if (array_key_exists('limit', $options))
         {
@@ -180,6 +186,33 @@ class Model
     }
 
     /**
+    *   Edit a row
+    */
+    public function edit($id, $data = array())
+    {
+        $validation = $this->_validate($data);
+        if ($validation === true)
+        {
+            $_updates = '';
+
+            foreach ($data as $key => $value)
+            {
+                $_updates .= '`' . $key . '` = "' . $value . '", ';
+            }
+
+            $_updates = substr($_updates, 0, -2);
+
+            $sql = 'UPDATE ' . $this->tablename . ' SET ' . $_updates . ' WHERE id = ' . $id;
+
+            return Database::SQL($sql, true);
+        }
+        else
+        {
+            return array('errors' => $validation);
+        }
+    }
+
+    /**
     *   Delete a row
     *   @var bool
     */
@@ -235,19 +268,22 @@ class Model
     {
         $errors = array();
 
+
         foreach ($data as $key => $value)
         {
-            // Debug::dump($data);
-            foreach ($this->validation[$key] as $validation)
+            if ($this->validation[$key])
             {
-                switch ($validation)
+                foreach ($this->validation[$key] as $validation)
                 {
-                    case 'notNull':
-                        if ($value == '') $errors[] = 'The ' . $key . ' field cannot be empty.';
-                        break;
-                    default:
-                        throw new D20Exception('Validation rule "' . $validation . '" not found.');
-                        break;
+                    switch ($validation)
+                    {
+                        case 'notNull':
+                            if ($value == '') $errors[] = 'The ' . $key . ' field cannot be empty.';
+                            break;
+                        default:
+                            throw new D20Exception('Validation rule "' . $validation . '" not found.');
+                            break;
+                    }
                 }
             }
         }

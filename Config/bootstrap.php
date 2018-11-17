@@ -5,6 +5,4 @@ Configure::write('env', 'dev');
 
 include_once 'routes.php';
 include_once 'enviroment.php';
-
-// Load plugins
-DTWENTY::addPlugin('Login');
+include_once 'plugins.php';

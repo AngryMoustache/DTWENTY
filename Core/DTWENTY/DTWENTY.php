@@ -22,6 +22,7 @@ class DTWENTY
     public function __construct()
     {
         $this->Plugins = new stdClass();
+
         $this->load(
             array(
                 'Configure',
@@ -37,8 +38,6 @@ class DTWENTY
             )
         );
 
-        $this->plugins(self::$_plugins);
-
         Database::connect();
     }
 
@@ -49,6 +48,8 @@ class DTWENTY
     */
     public function init()
     {
+        $this->loadPlugins();
+
         // Find the current route and render it
         $route = Route::find('/');
         if ($route)
@@ -97,9 +98,9 @@ class DTWENTY
     *   Load Plugins
     *
     */
-    public function plugins($plugins)
+    public function loadPlugins()
     {
-        foreach ($plugins as $value)
+        foreach (self::$_plugins as $value)
         {
             $path = 'Plugins/' . $value . '/index.php';
             require_once $path;

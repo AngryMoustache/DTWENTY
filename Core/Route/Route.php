@@ -57,7 +57,13 @@ class Route
         $parameters = array();
 
         // The current URL
-        $currentUrl = explode('/', $_SERVER['REQUEST_URI']);
+        $_url = $_SERVER['REQUEST_URI'];
+        if (strpos($_url, '?') > -1)
+        {
+            $_url = explode('?', $_url)[0];
+        }
+
+        $currentUrl = explode('/', $_url);
         array_shift($currentUrl);
 
         // Loop and find the correct route

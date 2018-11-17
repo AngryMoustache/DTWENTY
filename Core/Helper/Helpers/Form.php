@@ -36,12 +36,14 @@ class Form extends Helper
     *   Create an input field
     *   @var string
     */
-    public function input($name)
+    public function input($name, $value = '')
     {
+        if ($value == '' && isset($_POST[$name])) $value = $_POST[$name];
+
         return '<input type="text" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
-                'value="' . $_POST['username'] . '" ' .
+                'value="' . $value . '" ' .
                 '>';
     }
 
