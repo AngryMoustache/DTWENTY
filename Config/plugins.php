@@ -1,6 +1,6 @@
 <?php
 
-include_once('Core/Plugin/plugin.php');
+include_once('Core/Plugin/Plugin.php');
 
 // Load plugins
-DTWENTY::addPlugin('Admin');
+// DTWENTY::addPlugin('StaticString');

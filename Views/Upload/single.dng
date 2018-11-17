@@ -1,0 +1,21 @@
+<header>
+    <div class="text">
+        <h1><?php echo __ss('home', '[home.title]'); ?></h1>
+        <h2><?php echo __ss('home', '[home.subtitle]'); ?></h2>
+    </div>
+    <nav>
+        <a href="<?php echo Route::link('/'); ?>"><?php echo __ss('nav', '[nav.home]'); ?></a>
+        <a href="<?php echo Route::link('/uploads'); ?>"><?php echo __ss('nav', '[nav.uploads]'); ?></a>
+    </nav>
+    <div class="image small"></div>
+</header>
+
+<main>
+    <div class="single">
+        <h3 class="line"><?php echo $this->upload['name'] ?></h3>
+        <p>
+            <?php echo ($this->upload['description'] ? $this->upload['description'] : __ss('upload', '[upload.no description]')); ?>
+        </p>
+        <img src="<?php echo $this->Html->image('gallery/' . $this->upload['image']); ?>">
+    </div>
+</main>

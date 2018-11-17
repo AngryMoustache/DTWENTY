@@ -1,0 +1,22 @@
+<header>
+    <div class="text">
+        <h1><?php echo __ss('home', '[home.title]'); ?></h1>
+        <h2><?php echo __ss('home', '[home.subtitle]'); ?></h2>
+    </div>
+    <nav>
+        <a href="<?php echo Route::link('/'); ?>"><?php echo __ss('nav', '[nav.home]'); ?></a>
+        <a href="<?php echo Route::link('/uploads'); ?>"><?php echo __ss('nav', '[nav.uploads]'); ?></a>
+    </nav>
+    <div class="image small"></div>
+</header>
+
+<main>
+    <h3 class="line"><?php echo __ss('uploads', '[uploads.overview]'); ?></h3>
+    <div class="gallery">
+        <?php foreach ($this->uploads as $value) : ?>
+            <a href="<?php echo Route::link('/uploads/' . $value['id']); ?>"
+               style="background-image: url(<?php echo $this->Html->image('/gallery/thumbs/' . $value['image']); ?>)">
+            </a>
+        <?php endforeach; ?>
+    </div>
+</main>

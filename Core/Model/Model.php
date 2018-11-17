@@ -95,15 +95,29 @@ class Model
             {
                 if ($i == 0) $_word = ' where ';
                 else $_word = ' and ';
-                $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                if ($value[2] == null)
+                {
+                    if ($value[1] == '=') $value[1] = 'is';
+                    $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' null';
+                }
+                else
+                {
+                    $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                }
                 $i++;
             }
         }
 
         // order by (default)
-        if (!array_key_exists('order by', $options))
+        if (!array_key_exists('orderBy', $options))
         {
             $_options .= ' order by id ';
+        }
+
+        // order by
+        if (array_key_exists('orderBy', $options))
+        {
+            $_options .= ' order by ' . $options['orderBy'];
         }
 
         // limit

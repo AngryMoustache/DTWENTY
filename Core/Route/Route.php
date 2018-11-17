@@ -57,14 +57,14 @@ class Route
         $parameters = array();
 
         // The current URL
-        $_url = $_SERVER['REQUEST_URI'];
+        $basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
+        $_url = substr($_SERVER['REQUEST_URI'], strlen($basepath));
         if (strpos($_url, '?') > -1)
         {
             $_url = explode('?', $_url)[0];
         }
 
         $currentUrl = explode('/', $_url);
-        array_shift($currentUrl);
 
         // Loop and find the correct route
         foreach (self::$_instances as $_sysRoute)
@@ -103,5 +103,16 @@ class Route
         }
 
         return $foundRoute;
+    }
+
+    /**
+    *   Create a link
+    *   @var string
+    */
+    static function link($path)
+    {
+        $path = PROJECT_ROOT . $path;
+        $path = str_replace('//', '/', $path);
+        return $path;
     }
 }

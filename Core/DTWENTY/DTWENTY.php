@@ -35,6 +35,7 @@ class DTWENTY
                 'View',
                 'Helper',
                 'Plugin',
+                'StaticString',
             )
         );
 

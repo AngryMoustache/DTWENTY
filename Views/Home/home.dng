@@ -1,6 +1,25 @@
-<h1>Welcome to DTWENTY</h1>
-<p>
-    We hope you enjoy your stay in our dungeon ( ͡° ͜ʖ ͡°)<br>
-    You rolled a <?php echo $this->randomNumber; ?>!<br>
-</p>
+<header>
+    <div class="text">
+        <h1><?php echo __ss('home', '[home.title]'); ?></h1>
+        <h2><?php echo __ss('home', '[home.subtitle]'); ?></h2>
+    </div>
+    <nav>
+        <a href="<?php echo Route::link('/'); ?>"><?php echo __ss('nav', '[nav.home]'); ?></a>
+        <a href="<?php echo Route::link('/uploads'); ?>"><?php echo __ss('nav', '[nav.uploads]'); ?></a>
+    </nav>
+    <div class="image"></div>
+</header>
 
+
+<main>
+    <div class="latest">
+        <h3 class="line"><?php echo __ss('home', '[home.recent]'); ?></h3>
+        <div class="gallery">
+            <?php foreach ($this->recent as $value) : ?>
+                <a href="<?php echo Route::link('/uploads/' . $value['id']); ?>"
+                   style="background-image: url(<?php echo $this->Html->image('/gallery/thumbs/' . $value['image']); ?>)">
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</main>
