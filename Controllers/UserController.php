@@ -14,10 +14,12 @@ class UserController extends AppController
 
     public function single($id)
     {
-        $user = $this->User->find('*',
+        $user = $this->User->find(
             array(
-                'where' => 'id = ' . $id,
-                'limit' => 1,
+                'where' => array(
+                    array('id', '=', $id),
+                    array('username', '=', 'John'),
+                ),
             )
         );
 

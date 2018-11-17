@@ -77,6 +77,7 @@ class Model
     public function find($options = array())
     {
         $_sql = '';
+        $_options = '';
         $_return = array();
 
         // Get the selector from options, otherwise it's just everything
@@ -86,7 +87,26 @@ class Model
             $_select = implode($options['select'], ', ');
         }
 
-        $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename;
+        // where
+        if (array_key_exists('where', $options))
+        {
+            $i = 0;
+            foreach ($options['where'] as $value)
+            {
+                if ($i == 0) $_word = ' where ';
+                else $_word = ' and ';
+                $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                $i++;
+            }
+        }
+
+        // limit
+        if (array_key_exists('limit', $options))
+        {
+            $_options .= ' limit ' . $options['limit'];
+        }
+
+        $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename . ' ' . $_options;
 
         $_return = Database::SQLselect($_sql);
 
@@ -124,6 +144,7 @@ class Model
             }
         }
 
+        if (count($_return) == 1) return $_return[0];
         return $_return;
     }
 
