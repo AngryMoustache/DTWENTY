@@ -51,7 +51,7 @@ class Route
     *   Find the current route
     *
     */
-    static function find($url)
+    static function find()
     {
         $foundRoute = null;
         $parameters = array();
@@ -95,7 +95,11 @@ class Route
 
                     if ($i + 1 == count($sysRoute))
                     {
-                        $foundRoute = array('route' => $_sysRoute, 'parameters' => $parameters);
+                        $foundRoute = array(
+                            'route' => $_sysRoute,
+                            'parameters' => $parameters
+                        );
+
                         break 2;
                     }
                 }

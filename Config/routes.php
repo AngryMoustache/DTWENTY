@@ -13,6 +13,7 @@
 *       )
 *   );
 */
+
 Route::add(
     array(
         'path' => '/',
@@ -25,7 +26,7 @@ Route::add(
     array(
         'path' => '/uploads',
         'controller' => 'UploadController',
-        'action' => 'overview'
+        'action' => 'overview',
     )
 );
 

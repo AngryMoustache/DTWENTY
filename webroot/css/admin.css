@@ -1,10 +1,51 @@
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Hammersmith One", sans-serif; }
+
+p, a, li {
+  font-family: "Roboto", sans-serif; }
+
 .admin * {
   box-sizing: border-box; }
+.admin .button {
+  padding: 6px 10px 4px;
+  text-decoration: none;
+  border: 2px solid #d068e2;
+  color: #d068e2;
+  font-family: "Hammersmith One", sans-serif;
+  display: inline-block; }
+  .admin .button:hover {
+    background: #d068e2;
+    color: black; }
+.admin--text {
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 30px; }
+  .admin--text--info {
+    width: 400px;
+    float: left; }
+  .admin--text--buttons {
+    width: calc(100% - 420px);
+    float: right;
+    display: flex;
+    justify-content: flex-end; }
+.admin--loggedin {
+  float: right;
+  width: calc(100% - 300px);
+  background: #111;
+  overflow: auto; }
+  .admin--loggedin h4 {
+    padding: 18px;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    float: left; }
+  .admin--loggedin a {
+    float: right;
+    margin: 15px 10px; }
 .admin table {
   background: white; }
 .admin thead td,
 .admin tr td {
-  padding: 5px; }
+  padding: 5px 10px; }
 .admin thead {
   background: rgba(0, 0, 0, 0.8);
   color: white; }
@@ -16,7 +57,7 @@
   margin: 20px;
   width: calc(100% - 340px);
   background: white;
-  overflow: scroll; }
+  overflow: auto; }
   .admin main h3 {
     color: black; }
 .admin nav {
@@ -31,5 +72,13 @@
     text-align: center;
     padding: 40px 20px;
     line-height: 120%; }
+  .admin nav ul li a {
+    display: block;
+    padding: 15px 20px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: white; }
+    .admin nav ul li a:hover {
+      background: rgba(208, 104, 226, 0.2); }
 
 /*# sourceMappingURL=admin.css.map */

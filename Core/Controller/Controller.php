@@ -9,6 +9,12 @@ class Controller
     */
     public $models = array();
 
+    /**
+    *   The plugin of this controller
+    *   @var string
+    */
+    public $plugin;
+
     /*
     *
     *   The helpers this controller uses
@@ -63,9 +69,8 @@ class Controller
     *   Redirect to a different page
     *
     */
-    public function redirect($target)
+    public function redirect($path)
     {
-        header('Location: ' . $target);
-        die();
+        DTWENTY::redirect($path);
     }
 }
