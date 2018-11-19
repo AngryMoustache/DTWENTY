@@ -33,6 +33,16 @@ class Form extends Helper
     }
 
     /**
+    *   Create a label
+    *   @var string
+    */
+    public function label($name, $text)
+    {
+        $input = '<label for="' . $name . '">' . $text . '</label>';
+        return $input;
+    }
+
+    /**
     *   Create an input field
     *   @var string
     */
@@ -41,6 +51,7 @@ class Form extends Helper
         if ($value == '' && isset($_POST[$name])) $value = $_POST[$name];
 
         return '<input type="text" ' .
+                'id="' . $name . '" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
                 'value="' . $value . '" ' .
@@ -54,6 +65,7 @@ class Form extends Helper
     public function password($name = 'password')
     {
         return '<input type="password" ' .
+                'id="' . $name . '" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
                 'value="' . $_POST['username'] . '" ' .

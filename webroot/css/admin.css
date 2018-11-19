@@ -19,15 +19,17 @@ p, a, li {
 .admin--text {
   width: 100%;
   overflow: auto;
-  margin-bottom: 30px; }
+  margin-bottom: 10px; }
   .admin--text--info {
-    width: 400px;
-    float: left; }
+    width: 100%;
+    margin-bottom: 10px; }
   .admin--text--buttons {
-    width: calc(100% - 420px);
-    float: right;
+    width: 100%;
     display: flex;
-    justify-content: flex-end; }
+    justify-content: flex-start;
+    margin-bottom: 10px; }
+    .admin--text--buttons .button {
+      margin-right: 10px; }
 .admin--loggedin {
   float: right;
   width: calc(100% - 300px);
@@ -41,6 +43,30 @@ p, a, li {
   .admin--loggedin a {
     float: right;
     margin: 15px 10px; }
+.admin form ul li {
+  margin-bottom: 10px; }
+  .admin form ul li label, .admin form ul li input, .admin form ul li textarea {
+    font-size: 1rem;
+    padding: 5px; }
+  .admin form ul li label {
+    display: inline-block;
+    width: 150px; }
+  .admin form ul li input, .admin form ul li textarea {
+    width: 50%; }
+  .admin form ul li input[type=submit] {
+    width: auto;
+    padding: 6px 20px 4px;
+    text-decoration: none;
+    border: 2px solid #d068e2;
+    color: #d068e2;
+    font-family: "Hammersmith One", sans-serif;
+    display: inline-block;
+    background: none;
+    margin-top: 10px;
+    cursor: pointer; }
+    .admin form ul li input[type=submit]:hover {
+      background: #d068e2;
+      color: black; }
 .admin table {
   background: white; }
 .admin thead td,
@@ -65,13 +91,15 @@ p, a, li {
   width: 300px;
   min-height: 100vh;
   background: rgba(0, 0, 0, 0.8); }
-  .admin nav h1 {
+  .admin nav h1 a {
+    display: block;
     font-size: 3rem;
     color: white;
     background: #111;
     text-align: center;
     padding: 40px 20px;
-    line-height: 120%; }
+    line-height: 120%;
+    text-decoration: none; }
   .admin nav ul li a {
     display: block;
     padding: 15px 20px;
