@@ -9,7 +9,6 @@ class UploadController extends AppController
         $uploads = $this->Upload->find(
             array(
                 'where' => array(
-                    array('deleted_at', '=', null),
                     array('private', '=', '0'),
                 ),
             )

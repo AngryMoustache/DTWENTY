@@ -10,7 +10,7 @@
         <?php $this->content(); ?>
 
         <footer>
-            <p>&copy; <?php echo date("Y"); ?> - <?php echo Configure::read('site.name'); ?></p>
+            <?php echo $this->element('footer'); ?>
         </footer>
     </body>
 </html>

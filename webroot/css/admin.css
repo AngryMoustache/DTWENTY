@@ -45,7 +45,7 @@ p, a, li {
     margin: 15px 10px; }
 .admin form ul li {
   margin-bottom: 10px; }
-  .admin form ul li label, .admin form ul li input, .admin form ul li textarea {
+  .admin form ul li label, .admin form ul li input, .admin form ul li textarea, .admin form ul li select {
     font-size: 1rem;
     padding: 5px; }
   .admin form ul li label {
@@ -53,6 +53,16 @@ p, a, li {
     width: 150px; }
   .admin form ul li input, .admin form ul li textarea {
     width: 50%; }
+  .admin form ul li select {
+    min-width: 30%; }
+  .admin form ul li .js-image--preview {
+    width: 50px;
+    height: 50px;
+    margin: 5px 0 10px 154px;
+    background-color: black;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center; }
   .admin form ul li input[type=submit] {
     width: auto;
     padding: 6px 20px 4px;
@@ -71,7 +81,23 @@ p, a, li {
   background: white; }
 .admin thead td,
 .admin tr td {
+  vertical-align: top;
   padding: 5px 10px; }
+  .admin thead td img,
+  .admin tr td img {
+    width: 100px; }
+  .admin thead td span.tinyint,
+  .admin tr td span.tinyint {
+    display: inline-block;
+    padding: 2px 10px 1px;
+    font-weight: bold;
+    color: white; }
+    .admin thead td span.tinyint--true,
+    .admin tr td span.tinyint--true {
+      background: #05b914; }
+    .admin thead td span.tinyint--false,
+    .admin tr td span.tinyint--false {
+      background: #b90505; }
 .admin thead {
   background: rgba(0, 0, 0, 0.8);
   color: white; }

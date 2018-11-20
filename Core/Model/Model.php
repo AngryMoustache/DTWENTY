@@ -32,6 +32,18 @@ class Model
     public $relations;
 
     /**
+    *   Default valuefield
+    *   @var string
+    */
+    public $valueField = 'id';
+
+    /**
+    *   Default displayfield
+    *   @var string
+    */
+    public $displayField = 'name';
+
+    /**
     *
     *   The validation rules of the model
     *   - notNull
@@ -134,23 +146,22 @@ class Model
 
         for ($i = 0; $i < count($_return); $i++)
         {
-            // Joining tables
-            if (array_key_exists('relations', $options))
+            // Has One
+            if (isset($this->relations['hasOne']))
             {
-                // TODO
-            }
-            else
-            {
-                // Has One
-                if (isset($this->relations['hasOne']))
+                foreach ($this->relations['hasOne'] as $key => $value)
                 {
-                    foreach ($this->relations['hasOne'] as $key => $value)
-                    {
-                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i]['id']);
-                    }
+                    $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][strtolower($key) . '_id']);
                 }
+            }
 
-
+            // // Joining tables
+            // if (array_key_exists('relations', $options))
+            // {
+            //     // TODO
+            // }
+            // else
+            // {
                 // if (isset($this->relations['manyToMany']))
                 // {
                 //     foreach ($this->relations['manyToMany'] as $key => $value) {
@@ -163,7 +174,7 @@ class Model
                 //                  ' on ' . $value['joinTable'] . '.tag_id = tags.id';
                 //     }
                 // }
-            }
+            // }
         }
 
         if (array_key_exists('limit', $options) && $options['limit'] == 1)
@@ -253,7 +264,7 @@ class Model
         }
 
         if (is_file($path)) include_once($path);
-        else include_once('Models/' . $model . '.php');
+        else if (is_file($path)) include_once('Models/' . $model . '.php');
 
         return new $model();
     }
@@ -266,14 +277,15 @@ class Model
     {
         $this->{$model} = $this->loadModel($model);
 
-        $sql = 'select * from ' . $this->tablename .
-                ' join ' . $this->{$model}->tablename .
-                ' on ' . $this->{$model}->tablename .
-                '.' . $relation['targetForeignKey'] .
-                ' = ' . $this->tablename .
-                '.' . $relation['foreignKey'] .
-                ' where ' . $this->tablename . '.id = ' . $currentId;
+        // $sql = 'select * from ' . $this->tablename .
+        //         ' join ' . $this->{$model}->tablename .
+        //         ' on ' . $this->{$model}->tablename .
+        //         '.' . $relation['targetForeignKey'] .
+        //         ' = ' . $this->tablename .
+        //         '.' . $relation['foreignKey'] .
+        //         ' where ' . $this->tablename . '.id = ' . $currentId;
 
+        $sql = 'select * from ' . $this->{$model}->tablename . ' where ' . $relation['targetForeignKey'] . ' = ' . $currentId . ';';
         return Database::SQLselect($sql)[0];
     }
 
@@ -284,7 +296,6 @@ class Model
     private function _validate($data)
     {
         $errors = array();
-
 
         foreach ($data as $key => $value)
         {

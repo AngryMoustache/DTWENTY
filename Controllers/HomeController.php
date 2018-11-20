@@ -11,7 +11,6 @@ class HomeController extends AppController
                 'orderBy' => 'RAND()',
                 'limit' => 5,
                 'where' => array(
-                    array('deleted_at', '=', null),
                     array('private', '=', '0'),
                 ),
             )

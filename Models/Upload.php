@@ -2,5 +2,5 @@
 
 class Upload extends Model
 {
-
+    
 }
