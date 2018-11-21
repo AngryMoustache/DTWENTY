@@ -16,9 +16,7 @@
         <h3 class="line"><?php echo __ss('home', '[home.recent]'); ?></h3>
         <div class="gallery">
             <?php foreach ($this->recent as $value) : ?>
-                <a href="<?php echo Route::link('/uploads/' . $value['id']); ?>"
-                   style="background-image: url(<?php echo $this->Html->image('/gallery/thumbs/' . $value['image']); ?>)">
-                </a>
+                <?php echo $this->element('gallery_article', array('value' => $value)); ?>
             <?php endforeach; ?>
         </div>
     </div>

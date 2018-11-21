@@ -8,7 +8,7 @@ class Form extends Helper
     */
     public function start($options = array())
     {
-        $input = '<form ' . $this->_parseOptions($options) . ' >';
+        $input = '<form ' . $this->_parseOptions($options) . ' enctype="multipart/form-data">';
         return $input;
     }
 
