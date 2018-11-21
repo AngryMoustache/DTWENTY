@@ -37,3 +37,11 @@ Route::add(
         'action' => 'single'
     )
 );
+
+Route::add(
+    array(
+        'path' => '/page/:id',
+        'controller' => 'PageController',
+        'action' => 'single'
+    )
+);

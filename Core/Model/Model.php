@@ -155,26 +155,14 @@ class Model
                 }
             }
 
-            // // Joining tables
-            // if (array_key_exists('relations', $options))
-            // {
-            //     // TODO
-            // }
-            // else
-            // {
-                // if (isset($this->relations['manyToMany']))
-                // {
-                //     foreach ($this->relations['manyToMany'] as $key => $value) {
-                //         $this->{$key} = $this->loadModel($key);
-
-                //         $_sql .= ' left outer join ' . $value['joinTable'] .
-                //                  ' on ' . $this->tablename . '.id = ' . $value['joinTable'] . '.' . $value['foreignKey'] .
-                //                  ' and ' . $value['joinTable'] . '.' . $value['foreignKey'] . ' = 1' .
-                //                  ' left outer join tags' .
-                //                  ' on ' . $value['joinTable'] . '.tag_id = tags.id';
-                //     }
-                // }
-            // }
+            // Many to many
+            if (isset($this->relations['manyToMany']))
+            {
+                foreach ($this->relations['manyToMany'] as $key => $value)
+                {
+                    $_return[$i][$key . 's'] = $this->_manyToMany($key, $value, $_return[$i]['id']);
+                }
+            }
         }
 
         if (array_key_exists('limit', $options) && $options['limit'] == 1)
@@ -276,17 +264,24 @@ class Model
     private function _hasOne($model, $relation, $currentId)
     {
         $this->{$model} = $this->loadModel($model);
-
-        // $sql = 'select * from ' . $this->tablename .
-        //         ' join ' . $this->{$model}->tablename .
-        //         ' on ' . $this->{$model}->tablename .
-        //         '.' . $relation['targetForeignKey'] .
-        //         ' = ' . $this->tablename .
-        //         '.' . $relation['foreignKey'] .
-        //         ' where ' . $this->tablename . '.id = ' . $currentId;
-
         $sql = 'select * from ' . $this->{$model}->tablename . ' where ' . $relation['targetForeignKey'] . ' = ' . $currentId . ';';
-        return Database::SQLselect($sql)[0];
+        return Database::SQLselect($sql);
+    }
+
+    private function _manyToMany($model, $relation, $currentId)
+    {
+        $this->{$model} = $this->loadModel($model);
+        $tablename = $this->tablename;
+        $relationTable = $this->{$model}->tablename;
+
+        $sql = 'SELECT ' . $relationTable . '.* from ' . $relationTable . '
+                inner join ' . $relation['joinTable'] . 
+                ' on ' . $relationTable . '.id = ' . $relation['joinTable'] . '.' . $relation['targetForeignKey'] . '
+                inner join ' . $tablename . 
+                ' on ' . $relation['joinTable'] . '.' . $relation['foreignKey'] . ' = ' . $tablename . '.id
+                where ' . $tablename . '.id = ' . $currentId;
+
+        return Database::SQLselect($sql);
     }
 
     /**

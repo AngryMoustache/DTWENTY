@@ -2,5 +2,15 @@
 
 class UserAdmin extends AdminModel
 {
-    public $displayField = 'name';
+    public $overviewFields = array(
+        'id',
+        'avatar',
+        'username',
+        'email',
+        'admin',
+    );
+
+    public $imageFields = array(
+        'avatar',
+    );
 }

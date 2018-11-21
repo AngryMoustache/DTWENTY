@@ -1,0 +1,8 @@
+<header>
+    <?php echo $this->element('header'); ?>
+</header>
+
+<main>
+    <h3 class="line"><?php echo $this->page['title']; ?></h3>
+    <p><?php echo $this->page['body']; ?></p>
+</main>

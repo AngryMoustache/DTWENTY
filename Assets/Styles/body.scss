@@ -62,9 +62,10 @@ header {
 main {
     width: 1140px;
     margin: 50px auto;
+    min-height: calc(100vh - 528px - 84px);
 
-    h3 {
-        color: white;
+    h3, p {
+        color: #efefef;
         margin-bottom: 30px;
     }
 }

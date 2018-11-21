@@ -1,12 +1,5 @@
 <header>
-    <div class="text">
-        <h1><?php echo __ss('home', '[home.title]'); ?></h1>
-        <h2><?php echo __ss('home', '[home.subtitle]'); ?></h2>
-    </div>
-    <nav>
-        <a href="<?php echo Route::link('/'); ?>"><?php echo __ss('nav', '[nav.home]'); ?></a>
-        <a href="<?php echo Route::link('/uploads'); ?>"><?php echo __ss('nav', '[nav.uploads]'); ?></a>
-    </nav>
+    <?php echo $this->element('header'); ?>
     <div class="image"></div>
 </header>
 

@@ -1,13 +1,5 @@
 <header>
-    <div class="text">
-        <h1><?php echo __ss('home', '[home.title]'); ?></h1>
-        <h2><?php echo __ss('home', '[home.subtitle]'); ?></h2>
-    </div>
-    <nav>
-        <a href="<?php echo Route::link('/'); ?>"><?php echo __ss('nav', '[nav.home]'); ?></a>
-        <a href="<?php echo Route::link('/uploads'); ?>"><?php echo __ss('nav', '[nav.uploads]'); ?></a>
-    </nav>
-    <div class="image small"></div>
+    <?php echo $this->element('header'); ?>
 </header>
 
 <main>
@@ -16,6 +8,6 @@
         <p>
             <?php echo ($this->upload['description'] ? $this->upload['description'] : __ss('upload', '[upload.no description]')); ?>
         </p>
-        <img src="<?php echo $this->Html->image('uploads/' . $this->upload['Media']['image_url']); ?>">
+        <img src="<?php echo $this->Html->image('uploads/' . $this->upload['Media'][0]['image_url']); ?>">
     </div>
 </main>
