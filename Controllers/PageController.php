@@ -4,13 +4,13 @@ class PageController extends AppController
 {
     public $models = array('MenuItem', 'Page');
 
-    public function single($id)
+    public function single($slug)
     {
         $page = $this->Page->find(
             array(
                 'limit' => 1,
                 'where' => array(
-                    array('id', '=', $id),
+                    array('slug', '=', $slug),
                 ),
             )
         );

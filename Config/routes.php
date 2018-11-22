@@ -40,7 +40,7 @@ Route::add(
 
 Route::add(
     array(
-        'path' => '/page/:id',
+        'path' => '/:slug',
         'controller' => 'PageController',
         'action' => 'single'
     )

@@ -2,6 +2,8 @@
 
 class UserAdmin extends AdminModel
 {
+    public $displayField = 'username';
+
     public $overviewFields = array(
         'id',
         'media_id',
