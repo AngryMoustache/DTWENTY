@@ -42,6 +42,8 @@ class DTWENTY
             )
         );
 
+        $this->loadPlugins();
+
         Database::connect();
     }
 
@@ -52,8 +54,6 @@ class DTWENTY
     */
     public function init()
     {
-        $this->loadPlugins();
-
         // Find the current route and render it
         $route = Route::find();
         if ($route)

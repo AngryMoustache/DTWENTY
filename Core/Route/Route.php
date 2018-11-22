@@ -33,7 +33,8 @@ class Route
             $_new['shorthand'] = $_new['action'] . '@' . $_new['controller'];
         }
 
-        self::$_instances[] = $_new;
+        if (isset($_new['plugin'])) array_unshift(self::$_instances, $_new);
+        else self::$_instances[] = $_new;
     }
 
     /*
