@@ -11,6 +11,7 @@ class UploadAdmin extends AdminModel
             'User' => array(
                 'foreignKey' => 'user_id',
                 'targetForeignKey' => 'id',
+                'displayField' => 'name',
             )
         ),
         'manyToMany' => array(
@@ -18,6 +19,7 @@ class UploadAdmin extends AdminModel
                 'joinTable' => 'tags_uploads',
                 'foreignKey' => 'upload_id',
                 'targetForeignKey' => 'tag_id',
+                'displayField' => 'name',
             ),
         ),
     );
@@ -26,9 +28,6 @@ class UploadAdmin extends AdminModel
         'media_id' => array('type' => 'Media'),
         'user_id' => array('type' => 'Select'),
         'tags' => array('type' => 'ManyToMany'),
-    );
-
-    public $imageFields = array(
-        'avatar',
+        'private' => array('type' => 'Checkbox'),
     );
 }

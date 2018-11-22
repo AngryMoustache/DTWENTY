@@ -151,7 +151,8 @@ class Model
             {
                 foreach ($this->relations['hasOne'] as $key => $value)
                 {
-                    $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][strtolower($key) . '_id']);
+                    $_key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+                    $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][$_key . '_id']);
                 }
             }
 

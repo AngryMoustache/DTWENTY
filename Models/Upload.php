@@ -9,5 +9,5 @@ class Upload extends Model
                 'targetForeignKey' => 'id',
             )
         )
-    );  
+    );
 }

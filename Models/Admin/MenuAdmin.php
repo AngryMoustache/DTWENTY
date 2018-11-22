@@ -1,6 +1,6 @@
 <?php
 
-class TagAdmin extends AdminModel
+class MenuAdmin extends AdminModel
 {
     public $displayField = 'name';
 }

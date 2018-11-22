@@ -2,7 +2,7 @@
 
 class PageController extends AppController
 {
-    public $models = array('Page');
+    public $models = array('MenuItem', 'Page');
 
     public function single($id)
     {
@@ -15,7 +15,11 @@ class PageController extends AppController
             )
         );
 
-        $this->View->set(array('page' => $page));
+        $this->View->set(array(
+            'page' => $page,
+            'menu' => $this->_getMenu('home')
+        ));
+
         $this->View->render('Page/view');
     }
 }

@@ -4,13 +4,26 @@ class UserAdmin extends AdminModel
 {
     public $overviewFields = array(
         'id',
-        'avatar',
+        'media_id',
         'username',
         'email',
         'admin',
     );
 
     public $imageFields = array(
-        'avatar',
+        'media_id',
+    );
+
+    public $adminFields = array(
+        'media_id' => array('type' => 'Media'),
+    );
+
+    public $relations = array(
+        'hasOne' => array(
+            'Media' => array(
+                'foreignKey' => 'media_id',
+                'targetForeignKey' => 'id',
+            ),
+        )
     );
 }

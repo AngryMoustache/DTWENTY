@@ -55,6 +55,10 @@ p, a, li {
     width: 150px; }
   .admin form ul li input, .admin form ul li textarea {
     width: 50%; }
+  .admin form ul li input[type=checkbox] {
+    width: auto;
+    width: 20px;
+    height: 20px; }
   .admin form ul li select {
     min-width: 30%; }
   .admin form ul li .js-image--preview {

@@ -2,7 +2,7 @@
 
 class HomeController extends AppController
 {
-    public $models = array('Upload');
+    public $models = array('MenuItem', 'Upload');
 
     public function home()
     {
@@ -16,7 +16,11 @@ class HomeController extends AppController
             )
         );
 
-        $this->View->set(array('recent' => $recent));
+        $this->View->set(array(
+            'recent' => $recent,
+            'menu' => $this->_getMenu('home')
+        ));
+
         $this->View->render('Home/home');
     }
 }

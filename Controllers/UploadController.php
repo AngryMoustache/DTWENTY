@@ -2,7 +2,7 @@
 
 class UploadController extends AppController
 {
-    public $models = array('Upload');
+    public $models = array('MenuItem', 'Upload');
 
     public function overview()
     {
@@ -14,7 +14,11 @@ class UploadController extends AppController
             )
         );
 
-        $this->View->set(array('uploads' => $uploads));
+        $this->View->set(array(
+            'uploads' => $uploads,
+            'menu' => $this->_getMenu('home')
+        ));
+
         $this->View->render('Upload/overview');
     }
 
@@ -29,7 +33,11 @@ class UploadController extends AppController
             )
         );
 
-        $this->View->set(array('upload' => $upload));
+        $this->View->set(array(
+            'upload' => $upload,
+            'menu' => $this->_getMenu('home')
+        ));
+
         $this->View->render('Upload/single');
     }
 }
