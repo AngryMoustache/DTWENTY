@@ -64,13 +64,15 @@ class Form extends Helper
     */
     public function password($name = 'password')
     {
+        $value = (isset($_POST['username']) ? $_POST['username'] : '');
+
         return '<input type="password" ' .
                 'id="' . $name . '" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
-                'value="' . $_POST['username'] . '" ' .
+                'value="' . $value . '" ' .
                 '>';
-    
+
     }
 
     /**

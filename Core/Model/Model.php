@@ -47,7 +47,7 @@ class Model
     *
     *   The validation rules of the model
     *   - notNull
-    *   
+    *
     *   @var array
     *
     */
@@ -144,24 +144,27 @@ class Model
 
         $_return = Database::SQLselect($_sql);
 
-        for ($i = 0; $i < count($_return); $i++)
+        if ($_return)
         {
-            // Has One
-            if (isset($this->relations['hasOne']))
+            for ($i = 0; $i < count($_return); $i++)
             {
-                foreach ($this->relations['hasOne'] as $key => $value)
+                // Has One
+                if (isset($this->relations['hasOne']))
                 {
-                    $_key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
-                    $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][$_key . '_id']);
+                    foreach ($this->relations['hasOne'] as $key => $value)
+                    {
+                        $_key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][$_key . '_id']);
+                    }
                 }
-            }
 
-            // Many to many
-            if (isset($this->relations['manyToMany']))
-            {
-                foreach ($this->relations['manyToMany'] as $key => $value)
+                // Many to many
+                if (isset($this->relations['manyToMany']))
                 {
-                    $_return[$i][$key . 's'] = $this->_manyToMany($key, $value, $_return[$i]['id']);
+                    foreach ($this->relations['manyToMany'] as $key => $value)
+                    {
+                        $_return[$i][$key . 's'] = $this->_manyToMany($key, $value, $_return[$i]['id']);
+                    }
                 }
             }
         }
@@ -208,6 +211,8 @@ class Model
     public function edit($id, $data = array())
     {
         $validation = $this->_validate($data);
+        $data = $this->_parseManyToMany($id, $data);
+
         if ($validation === true)
         {
             $_updates = '';
@@ -276,9 +281,9 @@ class Model
         $relationTable = $this->{$model}->tablename;
 
         $sql = 'SELECT ' . $relationTable . '.* from ' . $relationTable . '
-                inner join ' . $relation['joinTable'] . 
+                inner join ' . $relation['joinTable'] .
                 ' on ' . $relationTable . '.id = ' . $relation['joinTable'] . '.' . $relation['targetForeignKey'] . '
-                inner join ' . $tablename . 
+                inner join ' . $tablename .
                 ' on ' . $relation['joinTable'] . '.' . $relation['foreignKey'] . ' = ' . $tablename . '.id
                 where ' . $tablename . '.id = ' . $currentId;
 
@@ -314,5 +319,49 @@ class Model
 
         if ($errors == array()) return true;
         return $errors;
+    }
+
+    /**
+    *   Parse manyToMany fields defined in the AdminModel
+    *   @param the current ID
+    *   @param the post values
+    *   @return array
+    */
+    protected function _parseManyToMany($id, $data)
+    {
+        if (isset($this->relations['manyToMany']))
+        {
+            foreach ($this->relations['manyToMany'] as $key => $value)
+            {
+                $_name = $key;
+                if (!isset($data[$_name])) $_name = $key . 's';
+                else $_name = '__NULL__';
+
+                // Remove the corresponding jointables
+                Database::SQL('DELETE FROM ' . $value['joinTable'] . ' WHERE '
+                       . $value['foreignKey'] . ' = ' . $id);
+
+                // Save the jointable
+                if ($_name !== '__NULL__')
+                {
+                    $sql = 'INSERT IGNORE INTO ' . $value['joinTable'] . ' ('
+                           . $value['foreignKey'] . ', '
+                           . $value['targetForeignKey'] . ') VALUES ';
+
+                    foreach ($data[$_name] as $item)
+                    {
+                        $sql .= '(' . $id . ', ' . $item . '), ';
+                    }
+
+                    $sql = substr($sql, 0, -2);
+
+                    Database::SQL($sql);
+
+                    unset($data[$_name]);
+                }
+            }
+        }
+
+        return $data;
     }
 }
