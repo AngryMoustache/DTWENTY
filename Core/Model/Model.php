@@ -182,6 +182,7 @@ class Model
     public function create($data = array())
     {
         $validation = $this->_validate($data);
+
         if ($validation === true)
         {
             $keys = '';
@@ -189,15 +190,21 @@ class Model
 
             foreach ($data as $key => $value)
             {
-                $keys .= '`' . $key . '`, ';
-                $values .= '"' . $value . '", ';
+                if (!is_array($value))
+                {
+                    $keys .= '`' . $key . '`, ';
+                    $values .= '"' . $value . '", ';
+                }
             }
 
             $keys = substr($keys, 0, -2);
             $values = substr($values, 0, -2);
 
             $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
-            return Database::SQL($sql);
+
+            $return = Database::SQL($sql);
+            $data = $this->_parseManyToMany($return, $data);
+            return $return;
         }
         else
         {
