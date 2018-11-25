@@ -136,7 +136,7 @@ class Model
 
 
         // Admin pagination
-        if (isset($this->adminPaginate))
+        if (array_key_exists('env', $options) && $options['env'] == 'Admin' && isset($this->adminPaginate))
         {
             if (!array_key_exists('limit', $options))
             {
