@@ -1,6 +1,6 @@
 <?php
 
-class Tag extends Model
+class Tag extends AdminModel
 {
-
+    public $displayField = 'name';
 }

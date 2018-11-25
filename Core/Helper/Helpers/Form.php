@@ -38,6 +38,7 @@ class Form extends Helper
     */
     public function label($name, $text)
     {
+        $text = ucwords(str_replace('_', ' ', $text));
         $input = '<label for="' . $name . '">' . $text . '</label>';
         return $input;
     }

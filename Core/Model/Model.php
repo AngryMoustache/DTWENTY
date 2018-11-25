@@ -134,11 +134,29 @@ class Model
             $_options .= ' order by ' . $options['orderBy'];
         }
 
-        // limit
-        if (array_key_exists('limit', $options))
+
+        // Admin pagination
+        if (isset($this->adminPaginate))
         {
-            $_options .= ' limit ' . $options['limit'];
+            if (!array_key_exists('limit', $options))
+            {
+                if (isset($this->adminPaginate['perPage']))
+                {
+                    $_options .= ' limit ' . $this->adminPaginate['perPage'];
+                }
+
+                $_options .= ((isset($_GET['page'])) ? ' offset ' . $this->adminPaginate['perPage'] * ($_GET['page'] - 1) : '');
+            }
         }
+        else
+        {
+            // limit
+            if (array_key_exists('limit', $options))
+            {
+                $_options .= ' limit ' . $options['limit'];
+            }
+        }
+
 
         $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename . ' ' . $_options;
 
@@ -370,5 +388,15 @@ class Model
         }
 
         return $data;
+    }
+
+    /**
+    *   Get amount of items in the database
+    *   @return integer
+    */
+    protected function _getAmount()
+    {
+        $sql = 'SELECT COUNT(*) from ' . $this->tablename;
+        return Database::SQLselect($sql)[0]["COUNT(*)"];
     }
 }

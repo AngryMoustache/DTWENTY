@@ -1,6 +1,6 @@
 <?php
 
-class MenuItem extends Model
+class MenuItem extends AdminModel
 {
     public $tablename = 'menu_items';
 
@@ -12,9 +12,17 @@ class MenuItem extends Model
                 'displayField' => 'name',
             ),
             'StaticString' => array(
+                'className' => 'StaticString',
                 'foreignKey' => 'static_string_id',
                 'targetForeignKey' => 'id',
+                'displayField' => 'string',
             ),
         )
+    );
+
+    public $adminFields = array(
+        'menu_id' => array('type' => 'Select'),
+        'static_string_id' => array('type' => 'Select'),
+        'link' => array('type' => 'LinkPicker'),
     );
 }

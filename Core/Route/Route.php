@@ -37,14 +37,26 @@ class Route
         else self::$_instances[] = $_new;
     }
 
-    /*
-    *
+    /**
     *   Get all routes
-    *
+    *   @param bool | return plugin routes
+    *   @return array of routes
     */
-    static function getAll()
+    static function getAll($plugin = true)
     {
-        return self::$_instances;
+        $routes = self::$_instances;
+        if (!$plugin)
+        {
+            foreach ($routes as $key => $route)
+            {
+                if (isset($route['plugin']) && !empty($route['plugin']))
+                {
+                    unset($routes[$key]);
+                }
+            }
+        }
+
+        return $routes;
     }
 
     /*

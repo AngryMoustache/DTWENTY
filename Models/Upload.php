@@ -1,7 +1,18 @@
 <?php
 
-class Upload extends Model
+class Upload extends AdminModel
 {
+    public $adminFields = array(
+        'media_id' => array('type' => 'Media'),
+        'user_id' => array('type' => 'Select'),
+        'tags' => array('type' => 'ManyToMany'),
+        'private' => array('type' => 'Checkbox'),
+    );
+
+    public $adminPaginate = array(
+        'perPage' => 5
+    );
+
     public $relations = array(
         'hasOne' => array(
             'Media' => array(
