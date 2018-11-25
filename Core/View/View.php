@@ -49,4 +49,25 @@ class View
             $this->{$key} = $value;
         }
     }
+
+    /**
+    *   Return an element
+    *   @return void
+    */
+    public function element($name, $data = null, $plugin = null)
+    {
+        $path = 'Views/Elements/' . $name . '.dng';
+        if ($plugin != null) $path = 'Plugins/' . $plugin . '/' . $path;
+        $path = str_replace('//', '/', $path);
+
+        if (is_array($data))
+        {
+            foreach ($data as $key => $value)
+            {
+                ${$key} = $value;
+            }
+        }
+
+        include($path);
+    }
 }

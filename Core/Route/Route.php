@@ -33,17 +33,30 @@ class Route
             $_new['shorthand'] = $_new['action'] . '@' . $_new['controller'];
         }
 
-        self::$_instances[] = $_new;
+        if (isset($_new['plugin'])) array_unshift(self::$_instances, $_new);
+        else self::$_instances[] = $_new;
     }
 
-    /*
-    *
+    /**
     *   Get all routes
-    *
+    *   @param bool | return plugin routes
+    *   @return array of routes
     */
-    static function getAll()
+    static function getAll($plugin = true)
     {
-        return self::$_instances;
+        $routes = self::$_instances;
+        if (!$plugin)
+        {
+            foreach ($routes as $key => $route)
+            {
+                if (isset($route['plugin']) && !empty($route['plugin']))
+                {
+                    unset($routes[$key]);
+                }
+            }
+        }
+
+        return $routes;
     }
 
     /*
@@ -51,20 +64,20 @@ class Route
     *   Find the current route
     *
     */
-    static function find($url)
+    static function find()
     {
         $foundRoute = null;
         $parameters = array();
 
         // The current URL
-        $_url = $_SERVER['REQUEST_URI'];
+        $basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
+        $_url = substr($_SERVER['REQUEST_URI'], strlen($basepath));
         if (strpos($_url, '?') > -1)
         {
             $_url = explode('?', $_url)[0];
         }
 
         $currentUrl = explode('/', $_url);
-        array_shift($currentUrl);
 
         // Loop and find the correct route
         foreach (self::$_instances as $_sysRoute)
@@ -95,7 +108,11 @@ class Route
 
                     if ($i + 1 == count($sysRoute))
                     {
-                        $foundRoute = array('route' => $_sysRoute, 'parameters' => $parameters);
+                        $foundRoute = array(
+                            'route' => $_sysRoute,
+                            'parameters' => $parameters
+                        );
+
                         break 2;
                     }
                 }
@@ -103,5 +120,16 @@ class Route
         }
 
         return $foundRoute;
+    }
+
+    /**
+    *   Create a link
+    *   @var string
+    */
+    static function link($path)
+    {
+        $path = PROJECT_ROOT . $path;
+        $path = str_replace('//', '/', $path);
+        return $path;
     }
 }

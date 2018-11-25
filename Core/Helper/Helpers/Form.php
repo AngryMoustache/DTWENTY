@@ -8,7 +8,7 @@ class Form extends Helper
     */
     public function start($options = array())
     {
-        $input = '<form ' . $this->_parseOptions($options) . ' >';
+        $input = '<form ' . $this->_parseOptions($options) . ' enctype="multipart/form-data">';
         return $input;
     }
 
@@ -33,6 +33,17 @@ class Form extends Helper
     }
 
     /**
+    *   Create a label
+    *   @var string
+    */
+    public function label($name, $text)
+    {
+        $text = ucwords(str_replace('_', ' ', $text));
+        $input = '<label for="' . $name . '">' . $text . '</label>';
+        return $input;
+    }
+
+    /**
     *   Create an input field
     *   @var string
     */
@@ -41,6 +52,7 @@ class Form extends Helper
         if ($value == '' && isset($_POST[$name])) $value = $_POST[$name];
 
         return '<input type="text" ' .
+                'id="' . $name . '" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
                 'value="' . $value . '" ' .
@@ -53,12 +65,15 @@ class Form extends Helper
     */
     public function password($name = 'password')
     {
+        $value = (isset($_POST['username']) ? $_POST['username'] : '');
+
         return '<input type="password" ' .
+                'id="' . $name . '" ' .
                 'name="' . $name . '" ' .
                 'placeholder="' . ucfirst($name) . '" ' .
-                'value="' . $_POST['username'] . '" ' .
+                'value="' . $value . '" ' .
                 '>';
-    
+
     }
 
     /**

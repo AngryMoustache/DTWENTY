@@ -32,10 +32,22 @@ class Model
     public $relations;
 
     /**
+    *   Default valuefield
+    *   @var string
+    */
+    public $valueField = 'id';
+
+    /**
+    *   Default displayfield
+    *   @var string
+    */
+    public $displayField = 'name';
+
+    /**
     *
     *   The validation rules of the model
     *   - notNull
-    *   
+    *
     *   @var array
     *
     */
@@ -52,7 +64,9 @@ class Model
     public function __construct()
     {
         // 1
-        $this->name = get_called_class();
+        if (!$this->name) {
+            $this->name = get_called_class();
+        }
 
         // 2
         if (!$this->tablename) {
@@ -95,62 +109,86 @@ class Model
             {
                 if ($i == 0) $_word = ' where ';
                 else $_word = ' and ';
-                $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                if ($value[2] == null)
+                {
+                    if ($value[1] == '=') $value[1] = 'is';
+                    $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' null';
+                }
+                else
+                {
+                    $_options .= $_word . ' ' . $value[0] . ' ' . $value[1] . ' "' . $value[2] . '"';
+                }
                 $i++;
             }
         }
 
         // order by (default)
-        if (!array_key_exists('order by', $options))
+        if (!array_key_exists('orderBy', $options))
         {
             $_options .= ' order by id ';
         }
 
-        // limit
-        if (array_key_exists('limit', $options))
+        // order by
+        if (array_key_exists('orderBy', $options))
         {
-            $_options .= ' limit ' . $options['limit'];
+            $_options .= ' order by ' . $options['orderBy'];
         }
+
+
+        // Admin pagination
+        if (isset($this->adminPaginate))
+        {
+            if (!array_key_exists('limit', $options))
+            {
+                if (isset($this->adminPaginate['perPage']))
+                {
+                    $_options .= ' limit ' . $this->adminPaginate['perPage'];
+                }
+
+                $_options .= ((isset($_GET['page'])) ? ' offset ' . $this->adminPaginate['perPage'] * ($_GET['page'] - 1) : '');
+            }
+        }
+        else
+        {
+            // limit
+            if (array_key_exists('limit', $options))
+            {
+                $_options .= ' limit ' . $options['limit'];
+            }
+        }
+
 
         $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename . ' ' . $_options;
 
         $_return = Database::SQLselect($_sql);
 
-        for ($i = 0; $i < count($_return); $i++)
+        if ($_return)
         {
-            // Joining tables
-            if (array_key_exists('relations', $options))
-            {
-                // TODO
-            }
-            else
+            for ($i = 0; $i < count($_return); $i++)
             {
                 // Has One
                 if (isset($this->relations['hasOne']))
                 {
                     foreach ($this->relations['hasOne'] as $key => $value)
                     {
-                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i]['id']);
+                        $_key = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $key));
+                        $_return[$i][$key] = $this->_hasOne($key, $value, $_return[$i][$_key . '_id']);
                     }
                 }
 
-
-                // if (isset($this->relations['manyToMany']))
-                // {
-                //     foreach ($this->relations['manyToMany'] as $key => $value) {
-                //         $this->{$key} = $this->loadModel($key);
-
-                //         $_sql .= ' left outer join ' . $value['joinTable'] .
-                //                  ' on ' . $this->tablename . '.id = ' . $value['joinTable'] . '.' . $value['foreignKey'] .
-                //                  ' and ' . $value['joinTable'] . '.' . $value['foreignKey'] . ' = 1' .
-                //                  ' left outer join tags' .
-                //                  ' on ' . $value['joinTable'] . '.tag_id = tags.id';
-                //     }
-                // }
+                // Many to many
+                if (isset($this->relations['manyToMany']))
+                {
+                    foreach ($this->relations['manyToMany'] as $key => $value)
+                    {
+                        $_return[$i][$key . 's'] = $this->_manyToMany($key, $value, $_return[$i]['id']);
+                    }
+                }
             }
         }
 
-        if (count($_return) == 1) return $_return[0];
+        if (array_key_exists('limit', $options) && $options['limit'] == 1)
+            return $_return[0];
         return $_return;
     }
 
@@ -162,6 +200,7 @@ class Model
     public function create($data = array())
     {
         $validation = $this->_validate($data);
+
         if ($validation === true)
         {
             $keys = '';
@@ -169,15 +208,21 @@ class Model
 
             foreach ($data as $key => $value)
             {
-                $keys .= '`' . $key . '`, ';
-                $values .= '"' . $value . '", ';
+                if (!is_array($value))
+                {
+                    $keys .= '`' . $key . '`, ';
+                    $values .= '"' . $value . '", ';
+                }
             }
 
             $keys = substr($keys, 0, -2);
             $values = substr($values, 0, -2);
 
             $sql = 'INSERT INTO ' . $this->tablename . ' (' . $keys . ') VALUES (' . $values . ');';
-            return Database::SQL($sql);
+
+            $return = Database::SQL($sql);
+            $data = $this->_parseManyToMany($return, $data);
+            return $return;
         }
         else
         {
@@ -191,6 +236,8 @@ class Model
     public function edit($id, $data = array())
     {
         $validation = $this->_validate($data);
+        $data = $this->_parseManyToMany($id, $data);
+
         if ($validation === true)
         {
             $_updates = '';
@@ -236,7 +283,7 @@ class Model
         }
 
         if (is_file($path)) include_once($path);
-        else include_once('Models/' . $model . '.php');
+        else if (is_file($path)) include_once('Models/' . $model . '.php');
 
         return new $model();
     }
@@ -248,16 +295,24 @@ class Model
     private function _hasOne($model, $relation, $currentId)
     {
         $this->{$model} = $this->loadModel($model);
+        $sql = 'select * from ' . $this->{$model}->tablename . ' where ' . $relation['targetForeignKey'] . ' = ' . $currentId . ';';
+        return Database::SQLselect($sql);
+    }
 
-        $sql = 'select * from ' . $this->tablename .
-                ' join ' . $this->{$model}->tablename .
-                ' on ' . $this->{$model}->tablename .
-                '.' . $relation['targetForeignKey'] .
-                ' = ' . $this->tablename .
-                '.' . $relation['foreignKey'] .
-                ' where ' . $this->tablename . '.id = ' . $currentId;
+    private function _manyToMany($model, $relation, $currentId)
+    {
+        $this->{$model} = $this->loadModel($model);
+        $tablename = $this->tablename;
+        $relationTable = $this->{$model}->tablename;
 
-        return Database::SQLselect($sql)[0];
+        $sql = 'SELECT ' . $relationTable . '.* from ' . $relationTable . '
+                inner join ' . $relation['joinTable'] .
+                ' on ' . $relationTable . '.id = ' . $relation['joinTable'] . '.' . $relation['targetForeignKey'] . '
+                inner join ' . $tablename .
+                ' on ' . $relation['joinTable'] . '.' . $relation['foreignKey'] . ' = ' . $tablename . '.id
+                where ' . $tablename . '.id = ' . $currentId;
+
+        return Database::SQLselect($sql);
     }
 
     /**
@@ -267,7 +322,6 @@ class Model
     private function _validate($data)
     {
         $errors = array();
-
 
         foreach ($data as $key => $value)
         {
@@ -290,5 +344,59 @@ class Model
 
         if ($errors == array()) return true;
         return $errors;
+    }
+
+    /**
+    *   Parse manyToMany fields defined in the AdminModel
+    *   @param the current ID
+    *   @param the post values
+    *   @return array
+    */
+    protected function _parseManyToMany($id, $data)
+    {
+        if (isset($this->relations['manyToMany']))
+        {
+            foreach ($this->relations['manyToMany'] as $key => $value)
+            {
+                $_name = $key;
+                if (!isset($data[$_name])) $_name = $key . 's';
+                else $_name = '__NULL__';
+
+                // Remove the corresponding jointables
+                Database::SQL('DELETE FROM ' . $value['joinTable'] . ' WHERE '
+                       . $value['foreignKey'] . ' = ' . $id);
+
+                // Save the jointable
+                if ($_name !== '__NULL__')
+                {
+                    $sql = 'INSERT IGNORE INTO ' . $value['joinTable'] . ' ('
+                           . $value['foreignKey'] . ', '
+                           . $value['targetForeignKey'] . ') VALUES ';
+
+                    foreach ($data[$_name] as $item)
+                    {
+                        $sql .= '(' . $id . ', ' . $item . '), ';
+                    }
+
+                    $sql = substr($sql, 0, -2);
+
+                    Database::SQL($sql);
+
+                    unset($data[$_name]);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+    *   Get amount of items in the database
+    *   @return integer
+    */
+    protected function _getAmount()
+    {
+        $sql = 'SELECT COUNT(*) from ' . $this->tablename;
+        return Database::SQLselect($sql)[0]["COUNT(*)"];
     }
 }

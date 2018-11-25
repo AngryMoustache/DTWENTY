@@ -1,6 +1,16 @@
-<h1>Welcome to DTWENTY</h1>
-<p>
-    We hope you enjoy your stay in our dungeon ( ͡° ͜ʖ ͡°)<br>
-    You rolled a <?php echo $this->randomNumber; ?>!<br>
-</p>
+<header>
+    <?php echo $this->element('header', array('menu' => $this->menu)) ?>
+    <div class="image"></div>
+</header>
 
+
+<main>
+    <div class="latest">
+        <h3 class="line"><?php echo __ss('home', '[home.recent]'); ?></h3>
+        <div class="gallery">
+            <?php foreach ($this->recent as $value) : ?>
+                <?php echo $this->element('gallery_article', array('value' => $value)); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</main>

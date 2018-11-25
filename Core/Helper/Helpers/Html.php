@@ -4,19 +4,6 @@ class Html extends Helper
 {
     /*
     *
-    *   Return a <link> tag
-    *
-    */
-    public function style($name, $plugin = null)
-    {
-        $link = '/Assets/Styles/' . $name . '.css';
-        if ($plugin != null) $link = '/Plugins/' . $plugin . $link;
-
-        return '<link rel="stylesheet" type="text/css" href="' . $link . '">';
-    }
-
-    /*
-    *
     *   Return a URL for a route
     *
     */
@@ -41,6 +28,40 @@ class Html extends Helper
         {
             throw new D20Exception('Route not found');
         }
+    }
 
+    /**
+    *   Return a <link> tag
+    *   @var string
+    */
+    public function style($name, $plugin = null)
+    {
+        $path = PROJECT_ROOT . 'webroot/css/' . $name . '.css';
+        if ($plugin != null) $path = '/Plugins/' . $plugin . $path;
+        $path = str_replace('//', '/', $path);
+
+        return '<link rel="stylesheet" type="text/css" href="' . $path . '">';
+    }
+
+    /**
+    *   Return a path to an image in the webroot
+    *   @var string
+    */
+    public function image($path)
+    {
+        $path = PROJECT_ROOT . 'webroot/img/' . $path;
+        $path = str_replace('//', '/', $path);
+        return $path;
+    }
+
+    /**
+    *   Return a favicon tag
+    *   @var string
+    */
+    public function favicon($path)
+    {
+        $path = PROJECT_ROOT . 'webroot/' . $path;
+        $path = str_replace('//', '/', $path);
+        return '<link rel="icon" href="' . $path . '">';
     }
 }

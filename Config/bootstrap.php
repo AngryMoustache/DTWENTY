@@ -1,6 +1,6 @@
 <?php
 
-Configure::write('site.name', 'DTWENTY');
+Configure::write('site.name', 'Angry Moustache');
 Configure::write('env', 'dev');
 
 include_once 'routes.php';

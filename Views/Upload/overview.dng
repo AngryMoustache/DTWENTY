@@ -1,0 +1,12 @@
+<header>
+    <?php echo $this->element('header', array('menu' => $this->menu)) ?>
+</header>
+
+<main>
+    <h3 class="line"><?php echo __ss('uploads', '[uploads.overview]'); ?></h3>
+    <div class="gallery">
+        <?php foreach ($this->uploads as $value) : ?>
+            <?php echo $this->element('gallery_article', array('value' => $value)); ?>
+        <?php endforeach; ?>
+    </div>
+</main>

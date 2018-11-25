@@ -1,0 +1,13 @@
+@import 'reset.scss';
+@import 'variables.scss';
+@import 'body.scss';
+@import 'gallery.scss';
+
+.line:after {
+    content: ' ';
+    margin-top: 15px;
+    display: block;
+    width: 100px;
+    height: 5px;
+    background-color: $c-primary;
+}

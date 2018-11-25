@@ -1,0 +1,13 @@
+<header>
+    <?php echo $this->element('header', array('menu' => $this->menu)) ?>
+</header>
+
+<main>
+    <div class="single">
+        <h3 class="line"><?php echo $this->upload['name'] ?></h3>
+        <p>
+            <?php echo ($this->upload['description'] ? $this->upload['description'] : __ss('upload', '[upload.no description]')); ?>
+        </p>
+        <img src="<?php echo $this->Html->image('uploads/' . $this->upload['Media'][0]['image_url']); ?>">
+    </div>
+</main>

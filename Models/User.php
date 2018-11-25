@@ -1,19 +1,31 @@
 <?php
 
-class User extends Model
+class User extends AdminModel
 {
-    public $relations = array(
-        'manyToMany' => array(
-            'Tag' => array(
-                'joinTable' => 'tags_users',
-                'foreignKey' => 'user_id',
-                'targetForeignKey' => 'tag_id',
-            )
-        ),
+    public $displayField = 'username';
+
+    public $overviewFields = array(
+        'id',
+        'media_id',
+        'username',
+        'email',
+        'admin',
     );
 
-    public $validation = array(
-        'username' => array('notNull'),
-        'password' => array('notNull'),
+    public $imageFields = array(
+        'media_id',
+    );
+
+    public $adminFields = array(
+        'media_id' => array('type' => 'Media'),
+    );
+
+    public $relations = array(
+        'hasOne' => array(
+            'Media' => array(
+                'foreignKey' => 'media_id',
+                'targetForeignKey' => 'id',
+            ),
+        )
     );
 }

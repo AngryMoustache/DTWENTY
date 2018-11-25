@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 /*
 *
 *   Core class for DTWENTY, called D20 for easier use
@@ -34,9 +36,13 @@ class DTWENTY
                 'Model',
                 'View',
                 'Helper',
+                'Middleware',
                 'Plugin',
+                'StaticString',
             )
         );
+
+        $this->loadPlugins();
 
         Database::connect();
     }
@@ -48,16 +54,15 @@ class DTWENTY
     */
     public function init()
     {
-        $this->loadPlugins();
-
         // Find the current route and render it
-        $route = Route::find('/');
+        $route = Route::find();
         if ($route)
         {
-            $this->controllerAction(
-                $route['route'],
-                $route['parameters']
-            );
+            // Check Middlewares
+            $this->middlewareCheck($route);
+
+            // Render page
+            $this->controllerAction($route);
         }
         else
         {
@@ -113,18 +118,55 @@ class DTWENTY
     *   Activate a controllers action
     *
     */
-    public function controllerAction($route, $parameters)
+    public function controllerAction($route)
     {
         include_once('Controllers/AppController.php');
 
-        if (isset($route['plugin']))
-            $plugin = 'Plugins/' . $route['plugin'] . '/';
+        if (isset($route['route']['plugin']))
+            $plugin = 'Plugins/' . $route['route']['plugin'] . '/';
         else $plugin = '';
 
-        include_once($plugin . 'Controllers/' . $route['controller'] . '.php');
-        $this->Controller = new $route['controller']();
+        include_once($plugin . 'Controllers/' . $route['route']['controller'] . '.php');
+        $this->Controller = new $route['route']['controller']();
 
-        call_user_func_array(array($this->Controller, $route['action']), $parameters);
+        call_user_func_array(array($this->Controller, $route['route']['action']), $route['parameters']);
+    }
+
+    /**
+    *   Check the middleware
+    */
+    protected function middlewareCheck($route)
+    {
+        if (isset($route['route']['middleware']))
+        {
+            foreach ($route['route']['middleware'] as $middleware)
+            {
+                if (isset($middleware['plugin'])) $plugin = 'Plugins/' . $middleware['plugin'] . '/';
+                else $plugin = '';
+                include_once($plugin . 'Controllers/Middleware/' . $middleware['middleware'] . '.php');
+
+                $_middleware = new $middleware['middleware']();
+                if (!$_middleware->{$middleware['action']}())
+                {
+                    $redirect = $_middleware->redirect;
+                    if (isset($middleware['redirect']))
+                        $redirect = $middleware['redirect'];
+
+                    $this->redirect($redirect);
+                }
+            }
+        }
+    }
+
+    /**
+    *   Redirect to a different page
+    */
+    static function redirect($path)
+    {
+        $path = PROJECT_ROOT . $path;
+        $path = str_replace('//', '/', $path);
+        header('Location: ' . $path);
+        die();
     }
 
     /*
