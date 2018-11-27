@@ -121,7 +121,6 @@ p, a, li {
     color: white; }
     .admin table thead a {
       color: white;
-      text-decoration: none;
       display: inline-block;
       width: 100%; }
   .admin table tr:nth-of-type(2n) {

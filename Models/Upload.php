@@ -12,6 +12,7 @@ class Upload extends AdminModel
     public $sortableFields = array(
         'id',
         'name',
+        'user_id',
         'private'
     );
 
