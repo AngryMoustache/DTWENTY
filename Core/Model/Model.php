@@ -134,7 +134,6 @@ class Model
             $_options .= ' order by ' . $options['orderBy'];
         }
 
-
         // Admin pagination
         if (array_key_exists('env', $options) && $options['env'] == 'Admin' && isset($this->adminPaginate))
         {
@@ -156,7 +155,6 @@ class Model
                 $_options .= ' limit ' . $options['limit'];
             }
         }
-
 
         $_sql .= 'SELECT ' . $_select . ' FROM ' . $this->tablename . ' ' . $_options;
 

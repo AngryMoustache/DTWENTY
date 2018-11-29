@@ -2,7 +2,7 @@
 
 class UploadController extends AppController
 {
-    public $models = array('MenuItem', 'Upload');
+    public $models = array('MenuItem', 'Upload', 'Tag');
 
     public function overview()
     {
@@ -14,9 +14,24 @@ class UploadController extends AppController
             )
         );
 
+        if (isset($_GET['tag']))
+        {
+            for ($i = count($uploads); $i >= 0; $i--)
+            {
+                if (array_search($_GET['tag'], array_column($uploads[$i]['Tags'], 'id')) === null
+                    || array_search($_GET['tag'], array_column($uploads[$i]['Tags'], 'id')) === false)
+                {
+                    unset($uploads[$i]);
+                }
+            }
+        }
+
+        $tags = $this->Tag->find();
+
         $this->View->set(array(
+            'menu' => $this->_getMenu('home'),
             'uploads' => $uploads,
-            'menu' => $this->_getMenu('home')
+            'tags' => $tags,
         ));
 
         $this->View->render('Upload/overview');

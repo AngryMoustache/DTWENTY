@@ -1,18 +1,21 @@
 .gallery {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
 
     a {
         display: block;
         width: calc(20% - 20px);
         padding-top: calc(20% - 20px);
+        margin-right: 25px;
         margin-bottom: 25px;
         float: left;
         background-position: center;
         background-size: cover;
         background-color: rgba(0, 0, 0, 0.1);
     }
+
+    a:nth-of-type(5n) { margin-right: 0; }
 }
 
 .single {
@@ -24,4 +27,11 @@
         margin: 20px 0;
         max-width: 100%;
     }
+}
+
+.tags {
+    min-width: calc(20% - 20px);
+    padding: 5px;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
 }

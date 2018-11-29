@@ -4,9 +4,43 @@
 
 <main>
     <h3 class="line"><?php echo __ss('uploads', '[uploads.overview]'); ?></h3>
+    <select id="js-tags" class="tags">
+        <option value="">
+            <?php echo __ss('tags', '[tags.reset filter]'); ?>
+        </option>
+        <?php foreach ($this->tags as $value) : ?>
+            <?php
+                $selected = (isset($_GET['tag']) && $_GET['tag'] == $value['id']) ? ' selected' : '';
+            ?>
+            <option value="<?php echo $value['id']; ?>" <?php echo $selected; ?>>
+                <?php echo $value['name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
     <div class="gallery">
         <?php foreach ($this->uploads as $value) : ?>
             <?php echo $this->element('gallery_article', array('value' => $value)); ?>
         <?php endforeach; ?>
     </div>
 </main>
+
+<script type="text/javascript">
+    
+    (() => {
+        let tags = document.getElementById('js-tags');
+
+        tags.addEventListener('change', () => {
+
+            let _url = '?';
+
+            if (tags.value !== '') {
+                _url += 'tag=' + tags.value;
+            }
+
+            window.location = _url;
+
+        });
+    })();
+
+</script>
