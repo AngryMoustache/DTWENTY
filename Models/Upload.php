@@ -17,7 +17,7 @@ class Upload extends AdminModel
     );
 
     public $adminPaginate = array(
-        'perPage' => 5
+        'perPage' => 10
     );
 
     public $relations = array(

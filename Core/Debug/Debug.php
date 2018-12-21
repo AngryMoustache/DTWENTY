@@ -2,7 +2,7 @@
 
 /*
 *
-*   CLass for debugging
+*   Class for debugging
 *
 */
 class Debug
