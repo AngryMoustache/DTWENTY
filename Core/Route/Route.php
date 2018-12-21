@@ -72,9 +72,13 @@ class Route
         // The current URL
         $basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
         $_url = substr($_SERVER['REQUEST_URI'], strlen($basepath));
-        if (strpos($_url, '?') > -1)
-        {
+
+        if (strpos($_url, '?') > -1) {
             $_url = explode('?', $_url)[0];
+        }
+
+        if (substr($_url, -1) == '/') {
+            $_url = substr($_url, 0, -1);
         }
 
         $currentUrl = explode('/', $_url);

@@ -9,8 +9,15 @@ class Upload extends AdminModel
         'private' => array('type' => 'Checkbox'),
     );
 
+    public $sortableFields = array(
+        'id',
+        'name',
+        'user_id',
+        'private'
+    );
+
     public $adminPaginate = array(
-        'perPage' => 5
+        'perPage' => 10
     );
 
     public $relations = array(
